@@ -1,6 +1,6 @@
 #include <stdio.h>
 
 int main(void) {
-    printf("initialize coop\n");
-    return 1;
+    printf("running coop\n");
+    return 0;
 }
