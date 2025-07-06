@@ -1,4 +1,4 @@
-project('coop', 'c', version: '0.0.1')
+project('coop', 'c', version: '0.0.1', default_options: ['c_std=c23'])
 
 src_files = run_command(['python3', 'grab_files.py', 'src'], check: true)
 sources = src_files.stdout().strip().split('\n')
