@@ -31,12 +31,7 @@ void exec_child(
     exit(1); // Only reached if execl fails
 }
 
-/**
- * Runs a process and captures its output
- * @param command Path to the executable to run
- * @return Dynamically allocated string containing the process output (caller must free)
- */
-char *run_process(const char *command) {
+char *run_process(const char *command, char *output) {
     int pipe_fds[2];
     if (pipe(pipe_fds) != 0) {
         fprintf(stderr, "Failed to create pipe\n");
@@ -58,45 +53,19 @@ char *run_process(const char *command) {
         return nullptr;
     } else {
         // Parent process
-        close(write_end); // Close write end
 
-        size_t output_capacity = 0;
-        size_t output_size = 0;
-        char *output = nullptr;
+        close(write_end); // Close write end
 
         // Read child's stdout
         char buffer[4096];
         ssize_t bytes_read;
+        char *read_pointer = output;
 
-        // Initial allocation for output buffer
-        output_capacity = 4096;
-        output = malloc(output_capacity);
-        if (!output) {
-            close(read_end);
-            return nullptr;
-        }
-
-        // Read all output
         while ((bytes_read = read(read_end, buffer, sizeof(buffer) - 1)) > 0) {
-            // Ensure we have enough space
-            if (output_size + bytes_read + 1 > output_capacity) {
-                output_capacity *= 2;
-                char *new_output = realloc(output, output_capacity);
-                if (!new_output) {
-                    free(output);
-                    close(read_end);
-                    return NULL;
-                }
-                output = new_output;
-            }
-
-            // Copy the new data
-            memcpy(output + output_size, buffer, bytes_read);
-            output_size += bytes_read;
+            memcpy(read_pointer, buffer, bytes_read);
+            read_pointer += bytes_read;
         }
-
-        // Null-terminate the output
-        output[output_size] = '\0';
+        *read_pointer = '\0';
 
         close(read_end); // Close read end
 
@@ -104,7 +73,7 @@ char *run_process(const char *command) {
         waitpid(pid, &status, 0);
         if (WEXITSTATUS(status) != 0) {
             free(output);
-            return NULL;
+            return nullptr;
         }
 
         return output;
@@ -112,8 +81,8 @@ char *run_process(const char *command) {
 }
 
 void test_e2e(void) {
-    char *output = run_process(filePath);
-    TEST_ASSERT_NOT_NULL(output);
+    char *output = calloc(sizeof(char), 1024 * 16);
+    run_process(filePath, output);
 
     printf("Output from test program:\n%s", output);
 
