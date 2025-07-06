@@ -31,7 +31,7 @@ void exec_child(
     exit(1); // Only reached if execl fails
 }
 
-char *run_process(const char *command, char *output) {
+void run_process(const char *command, char *output) {
     int pipe_fds[2];
     if (pipe(pipe_fds) != 0) {
         fprintf(stderr, "Failed to create pipe\n");
@@ -50,7 +50,6 @@ char *run_process(const char *command, char *output) {
 
     if (pid == 0) {
         exec_child(command, read_end, write_end);
-        return nullptr;
     } else {
         // Parent process
 
@@ -72,11 +71,9 @@ char *run_process(const char *command, char *output) {
         int status;
         waitpid(pid, &status, 0);
         if (WEXITSTATUS(status) != 0) {
-            free(output);
-            return nullptr;
+            fprintf(stderr, "Child process failed with exit code %d\n", WEXITSTATUS(status));
+            exit(1);
         }
-
-        return output;
     }
 }
 
