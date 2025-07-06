@@ -4,7 +4,7 @@ src_files = run_command(['python3', 'grab_files.py', 'src'], check: true)
 sources = src_files.stdout().strip().split('\n')
 coop = executable(
     'coop',
-    'entrypoint/coop.c',sources,
+    'entrypoint/coop.c', sources,
     include_directories: ['src']
 )
 
@@ -23,9 +23,11 @@ unity = files('libs/unity/unity.c')
 #    test(name, exe)
 #endforeach
 
+e2e_files = run_command(['python3', 'grab_files.py', 'e2e'], check : true)
+e2e_sources = e2e_files.stdout().strip().split('\n')
 e2e = executable(
     'e2e',
-    'e2e/e2e.c', unity,
+    e2e_sources, unity,
     include_directories: ['libs']
 )
 test(
