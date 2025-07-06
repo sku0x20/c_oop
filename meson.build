@@ -3,8 +3,8 @@ project('coop', 'c', version: '0.0.1')
 src_files = run_command(['python3', 'grab_files.py', 'src'], check: true)
 sources = src_files.stdout().strip().split('\n')
 executable(
-    'spike',
-    'entrypoint/spike.c',sources,
+    'coop',
+    'entrypoint/coop.c',sources,
     include_directories: ['src']
 )
 
