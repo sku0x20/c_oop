@@ -16,19 +16,56 @@ static const char *filePath = nullptr;
 
 void exec_child(
     const char *command,
-    const int read_end,
     const int write_end
 ) {
-    close(read_end); // Close read end
-
     // Redirect stdout to pipe
     if (dup2(write_end, STDOUT_FILENO) == -1) {
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     close(write_end); // Close original write end
 
     execl(command, command, nullptr);
-    exit(1); // Only reached if execl fails
+    exit(EXIT_FAILURE); // Only reached if execl fails
+}
+
+#define BUFFER_SIZE 4096
+
+static void read_output_from_pipe(
+    const int read_end,
+    char *output
+) {
+    char buffer[BUFFER_SIZE];
+    ssize_t bytes_read;
+    char *output_ptr = output;
+
+    while ((bytes_read = read(read_end, buffer, sizeof(buffer) - 1)) > 0) {
+        memcpy(output_ptr, buffer, bytes_read);
+        output_ptr += bytes_read;
+    }
+
+    if (bytes_read == -1) {
+        fprintf(stderr, "Error reading from pipe\n");
+        close(read_end);
+        exit(EXIT_FAILURE);
+    }
+
+    *output_ptr = '\0';
+
+    close(read_end);
+}
+
+static void capture_output(
+    const int read_end,
+    const pid_t pid,
+    char *output
+) {
+    read_output_from_pipe(read_end, output);
+    int status;
+    waitpid(pid, &status, 0);
+    if (WEXITSTATUS(status) != EXIT_SUCCESS) {
+        fprintf(stderr, "Child process failed with exit code %d\n", WEXITSTATUS(status));
+        exit(EXIT_FAILURE);
+    }
 }
 
 void run_process(const char *command, char *output) {
@@ -49,31 +86,11 @@ void run_process(const char *command, char *output) {
     }
 
     if (pid == 0) {
-        exec_child(command, read_end, write_end);
+        close(read_end);
+        exec_child(command, write_end);
     } else {
-        // Parent process
-
-        close(write_end); // Close write end
-
-        // Read child's stdout
-        char buffer[4096];
-        ssize_t bytes_read;
-        char *read_pointer = output;
-
-        while ((bytes_read = read(read_end, buffer, sizeof(buffer) - 1)) > 0) {
-            memcpy(read_pointer, buffer, bytes_read);
-            read_pointer += bytes_read;
-        }
-        *read_pointer = '\0';
-
-        close(read_end); // Close read end
-
-        int status;
-        waitpid(pid, &status, 0);
-        if (WEXITSTATUS(status) != 0) {
-            fprintf(stderr, "Child process failed with exit code %d\n", WEXITSTATUS(status));
-            exit(1);
-        }
+        close(write_end);
+        capture_output(read_end, pid, output);
     }
 }
 
