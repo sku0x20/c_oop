@@ -12,8 +12,6 @@ static void capture_output(int read_fd, pid_t pid, char *output);
 
 static void exec_child(const char *command, int write_fd);
 
-static void read_output_from_pipe(int read_fd, char *output);
-
 void run_process(const char *command, char *output) {
     int pipe_fds[2];
     if (pipe(pipe_fds) != 0) {
