@@ -12,38 +12,41 @@ void tearDown(void) {}
 static const char *filePath = nullptr;
 
 void test_e2e(void) {
-    int pipefd[2];
+    int pipe_fds[2];
+    int read_end, write_end;
 
     // Create pipe for stdout capture
-    TEST_ASSERT_EQUAL(0, pipe(pipefd));
+    TEST_ASSERT_EQUAL(0, pipe(pipe_fds));
+    read_end = pipe_fds[0];
+    write_end = pipe_fds[1];
 
     pid_t pid = fork();
     TEST_ASSERT_NOT_EQUAL(-1, pid);
 
     if (pid == 0) {
         // Child process
-        close(pipefd[0]); // Close read end
+        close(read_end); // Close read end
 
         // Redirect stdout to pipe
-        TEST_ASSERT_NOT_EQUAL(-1, dup2(pipefd[1], STDOUT_FILENO));
-        close(pipefd[1]); // Close original write end
+        TEST_ASSERT_NOT_EQUAL(-1, dup2(write_end, STDOUT_FILENO));
+        close(write_end); // Close original write end
 
         execl(filePath, filePath, nullptr);
         exit(1);
     } else {
         // Parent process
-        close(pipefd[1]); // Close write end
+        close(write_end); // Close write end
 
         // Read child's stdout
         char buffer[4096];
         ssize_t bytes_read;
 
         printf("Output from test program:\n");
-        while ((bytes_read = read(pipefd[0], buffer, sizeof(buffer) - 1)) > 0) {
+        while ((bytes_read = read(read_end, buffer, sizeof(buffer) - 1)) > 0) {
             buffer[bytes_read] = '\0';
             printf("%s", buffer);
         }
-        close(pipefd[0]); // Close read end
+        close(read_end); // Close read end
 
         int status;
         waitpid(pid, &status, 0);
