@@ -12,87 +12,15 @@ void setUp(void) {
 void tearDown(void) {
 }
 
+static void read_output_from_pipe(int read_fd, char *output);
+
+static void capture_output(int read_fd, pid_t pid, char *output);
+
+void exec_child(const char *command, int write_fd);
+
+void run_process(const char *command, char *output);
+
 static const char *filePath = nullptr;
-
-void exec_child(
-    const char *command,
-    const int write_end
-) {
-    // Redirect stdout to pipe
-    if (dup2(write_end, STDOUT_FILENO) == -1) {
-        exit(EXIT_FAILURE);
-    }
-    close(write_end); // Close original write end
-
-    execl(command, command, nullptr);
-    exit(EXIT_FAILURE); // Only reached if execl fails
-}
-
-#define BUFFER_SIZE 4096
-
-static void read_output_from_pipe(
-    const int read_end,
-    char *output
-) {
-    char buffer[BUFFER_SIZE];
-    ssize_t bytes_read;
-    char *output_ptr = output;
-
-    while ((bytes_read = read(read_end, buffer, sizeof(buffer) - 1)) > 0) {
-        memcpy(output_ptr, buffer, bytes_read);
-        output_ptr += bytes_read;
-    }
-
-    if (bytes_read == -1) {
-        fprintf(stderr, "Error reading from pipe\n");
-        close(read_end);
-        exit(EXIT_FAILURE);
-    }
-
-    *output_ptr = '\0';
-
-    close(read_end);
-}
-
-static void capture_output(
-    const int read_end,
-    const pid_t pid,
-    char *output
-) {
-    read_output_from_pipe(read_end, output);
-    int status;
-    waitpid(pid, &status, 0);
-    if (WEXITSTATUS(status) != EXIT_SUCCESS) {
-        fprintf(stderr, "Child process failed with exit code %d\n", WEXITSTATUS(status));
-        exit(EXIT_FAILURE);
-    }
-}
-
-void run_process(const char *command, char *output) {
-    int pipe_fds[2];
-    if (pipe(pipe_fds) != 0) {
-        fprintf(stderr, "Failed to create pipe\n");
-        exit(1);
-    }
-    const int read_end = pipe_fds[0];
-    const int write_end = pipe_fds[1];
-
-    const pid_t pid = fork();
-    if (pid == -1) {
-        close(read_end);
-        close(write_end);
-        fprintf(stderr, "Failed to fork\n");
-        exit(1);
-    }
-
-    if (pid == 0) {
-        close(read_end);
-        exec_child(command, write_end);
-    } else {
-        close(write_end);
-        capture_output(read_end, pid, output);
-    }
-}
 
 void test_e2e(void) {
     char *output = calloc(sizeof(char), 1024 * 16);
@@ -113,4 +41,70 @@ int main(int argc, char *argv[]) {
     UNITY_BEGIN();
     RUN_TEST(test_e2e);
     return UNITY_END();
+}
+
+void exec_child(const char *command, const int write_fd) {
+    // Redirect stdout to pipe
+    if (dup2(write_fd, STDOUT_FILENO) == -1) {
+        exit(EXIT_FAILURE);
+    }
+    close(write_fd);
+
+    execl(command, command, nullptr);
+    exit(EXIT_FAILURE); // Only reached if execl fails
+}
+
+#define BUFFER_SIZE 4096
+
+static void read_output_from_pipe(const int read_fd, char *output) {
+    char buffer[BUFFER_SIZE] = {0};
+    ssize_t bytes_read = 0;
+    char *output_ptr = output;
+    while ((bytes_read = read(read_fd, buffer, sizeof(buffer) - 1)) > 0) {
+        memcpy(output_ptr, buffer, bytes_read);
+        output_ptr += bytes_read;
+    }
+    if (bytes_read == -1) {
+        fprintf(stderr, "Error reading from pipe\n");
+        close(read_fd);
+        exit(EXIT_FAILURE);
+    }
+    *output_ptr = '\0';
+    close(read_fd);
+}
+
+static void capture_output(const int read_fd, const pid_t pid, char *output) {
+    read_output_from_pipe(read_fd, output);
+    int status;
+    waitpid(pid, &status, 0);
+    if (WEXITSTATUS(status) != EXIT_SUCCESS) {
+        fprintf(stderr, "Child process failed with exit code %d\n", WEXITSTATUS(status));
+        exit(EXIT_FAILURE);
+    }
+}
+
+void run_process(const char *command, char *output) {
+    int pipe_fds[2];
+    if (pipe(pipe_fds) != 0) {
+        fprintf(stderr, "Failed to create pipe\n");
+        exit(1);
+    }
+    const int read_fd = pipe_fds[0];
+    const int write_fd = pipe_fds[1];
+
+    const pid_t pid = fork();
+    if (pid == -1) {
+        close(read_fd);
+        close(write_fd);
+        fprintf(stderr, "Failed to fork\n");
+        exit(1);
+    }
+
+    if (pid == 0) {
+        close(read_fd);
+        exec_child(command, write_fd);
+    } else {
+        close(write_fd);
+        capture_output(read_fd, pid, output);
+    }
 }
