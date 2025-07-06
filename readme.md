@@ -50,3 +50,7 @@ its an an opinionated approach to do
 - interfaces cannot be initiated
 - a types is said to implement an interface when it embed interface as first member
 - each type has a constructor which takes care of mapping methods and initializing the object instance
+
+## resources
+
+- https://youtu.be/ic3375eJIMQ
