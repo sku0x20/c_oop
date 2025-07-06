@@ -13,8 +13,6 @@ static const char *filePath = nullptr;
 
 void test_e2e(void) {
     int pipefd[2];
-    char buffer[4096];
-    ssize_t bytes_read;
 
     // Create pipe for stdout capture
     TEST_ASSERT_EQUAL(0, pipe(pipefd));
@@ -37,6 +35,9 @@ void test_e2e(void) {
         close(pipefd[1]); // Close write end
 
         // Read child's stdout
+        char buffer[4096];
+        ssize_t bytes_read;
+
         printf("Output from test program:\n");
         while ((bytes_read = read(pipefd[0], buffer, sizeof(buffer) - 1)) > 0) {
             buffer[bytes_read] = '\0';
