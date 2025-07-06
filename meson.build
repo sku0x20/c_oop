@@ -28,3 +28,4 @@ e2e = executable(
     'e2e/e2e.c', unity,
     include_directories: ['libs']
 )
+test('e2e', e2e)
