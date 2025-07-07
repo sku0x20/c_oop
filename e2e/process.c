@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/types.h>
+#include <sys/wait.h>
 
 void runProcess(const char *filepath) {
     fflush(stdout);
@@ -18,5 +19,8 @@ void runProcess(const char *filepath) {
         exit(EXIT_SUCCESS);
     } else {
         printf("from parent pid: %d\n", pid);
+        int status;
+        wait(&status);
+        printf("child status: %d\n", WEXITSTATUS(status));
     }
 }
