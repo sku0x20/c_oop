@@ -31,6 +31,7 @@ ProgramResult runProgram(const char *filepath) {
     if (pid == 0) {
         close(readFd);
         dup2(writeFd, STDOUT_FILENO);
+        dup2(writeFd, STDERR_FILENO);
         close(writeFd);
         execl(filepath, nullptr);
         perror("execl");
