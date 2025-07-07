@@ -31,7 +31,7 @@ void runProcess(const char *filepath) {
         printf("child pid: %d\n", getpid());
         fflush(stdout);
         ssize_t n = 0;
-        if ((n = write(writeFd, "from\n", 12)) < 0) {
+        if ((n = write(writeFd, "from child 1\n", 12)) < 0) {
             perror("write");
             close(writeFd);
             exit(EXIT_FAILURE);
