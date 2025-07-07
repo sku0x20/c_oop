@@ -16,7 +16,10 @@ void runProcess(const char *filepath) {
     }
     if (pid == 0) {
         printf("child pid: %d\n", getpid());
-        exit(EXIT_SUCCESS);
+        fflush(stdout);
+        execl(filepath, nullptr);
+        perror("execl");
+        exit(EXIT_FAILURE);
     } else {
         printf("from parent pid: %d\n", pid);
         int status;
