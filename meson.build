@@ -23,11 +23,13 @@ unity = files('libs/unity/unity.c')
 #    test(name, exe)
 #endforeach
 
+sds = files('libs/sds/sds.c')
+
 e2e_files = run_command(['python3', 'grab_files.py', 'e2e'], check : true)
 e2e_sources = e2e_files.stdout().strip().split('\n')
 e2e = executable(
     'e2e',
-    e2e_sources, unity,
+    e2e_sources, unity, sds,
     include_directories: ['libs']
 )
 test(
