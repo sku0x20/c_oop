@@ -30,12 +30,30 @@ void runProcess(const char *filepath) {
         close(readFd);
         printf("child pid: %d\n", getpid());
         fflush(stdout);
-        execl(filepath, nullptr);
-        perror("execl");
+        ssize_t n = 0;
+        if ((n = write(writeFd, "from\n", 12)) < 0) {
+            perror("write");
+            close(writeFd);
+            exit(EXIT_FAILURE);
+        }
+        printf("wrote %ld bytes\n", n);
+        close(writeFd);
+        // execl(filepath, nullptr);
+        // perror("execl");
         exit(EXIT_FAILURE);
     } else {
         close(writeFd);
         printf("from parent pid: %d\n", pid);
+        ssize_t n = 0;
+        char buffer[1024];
+        if ((n = read(readFd, buffer, 12)) < 0) {
+            printf("read %ld bytes\n", n);
+            perror("read");
+            close(readFd);
+            exit(EXIT_FAILURE);
+        }
+        printf("read %ld bytes\n", n);
+        printf("data %s\n", buffer);
         int status;
         wait(&status);
         printf("child status: %d\n", WEXITSTATUS(status));
