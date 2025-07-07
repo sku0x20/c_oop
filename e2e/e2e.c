@@ -10,8 +10,9 @@ void tearDown(void) {
 static const char *filePath = nullptr;
 
 void test_e2e(void) {
-    ProgramResult result = runProgram(filePath);
+    const ProgramResult result = runProgram(filePath);
     TEST_ASSERT_EQUAL(0, result.exitStatus);
+    TEST_ASSERT_EQUAL_STRING("running coop\nsome error!!!\n", result.output);
 }
 
 int main(int argc, char *argv[]) {
