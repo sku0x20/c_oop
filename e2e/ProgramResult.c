@@ -38,11 +38,7 @@ ProgramResult runProgram(const char *filepath) {
         exit(EXIT_FAILURE);
     } else {
         close(writeFd);
-        printf("from parent pid: %d\n", pid);
-
         sds data = read_data(readFd);
-        printf("data '%s' of len %lu\n", data, sdslen(data));
-
         int status;
         wait(&status);
         return (ProgramResult){
