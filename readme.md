@@ -53,4 +53,4 @@ its an an opinionated approach to do
 
 ## resources
 
-- https://youtu.be/ic3375eJIMQ
+- https://youtu.be/bZO0A1tj2MI
