@@ -32,14 +32,11 @@ void runProcess(const char *filepath) {
         close(readFd);
         printf("child pid: %d\n", getpid());
         fflush(stdout);
-        ssize_t n = 0;
-        if ((n = write(writeFd, "from child 1\n", 12)) < 0) {
-            perror("write");
-            close(writeFd);
-            exit(EXIT_FAILURE);
-        }
-        printf("wrote %ld bytes\n", n);
+
+        dup2(writeFd, STDOUT_FILENO);
         close(writeFd);
+        printf("print to child stdout\n");
+        printf("another message\n");
         // execl(filepath, nullptr);
         // perror("execl");
         exit(EXIT_FAILURE);
