@@ -1,4 +1,4 @@
-#include "ProgramResult.h"
+#include "Program.h"
 #include "unity/unity.h"
 
 void setUp(void) {
