@@ -13,17 +13,17 @@ coop = executable(
 
 unity = files('libs/unity/unity.c')
 
-#test_files = run_command(['python3', 'grab_files.py', 'test'], check: true)
-#tests = test_files.stdout().strip().split('\n')
-#foreach t: tests
-#    name = t.replace('/', '_').replace('.c', '')
-#    exe = executable(
-#        name,
-#        t, sources, unity,
-#        include_directories: ['src', 'libs']
-#    )
-#    test(name, exe)
-#endforeach
+test_files = run_command(['python3', 'grab_files.py', 'test'], check : true)
+tests = test_files.stdout().strip().split('\n')
+foreach t : tests
+    name = t.replace('/', '_').replace('.c', '')
+    exe = executable(
+        name,
+        t, sources, unity,
+        include_directories : ['src', 'libs']
+    )
+    test(name, exe)
+endforeach
 
 
 e2e_files = run_command(['python3', 'grab_files.py', 'e2e'], check : true)
