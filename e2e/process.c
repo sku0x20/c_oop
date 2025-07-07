@@ -38,7 +38,7 @@ void run_process(const char *command, char *output) {
     }
 }
 
-void exec_child(const char *command, const int write_fd) {
+static void exec_child(const char *command, const int write_fd) {
     // Redirect stdout to pipe
     if (dup2(write_fd, STDOUT_FILENO) == -1) {
         exit(EXIT_FAILURE);
