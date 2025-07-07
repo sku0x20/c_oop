@@ -1,4 +1,4 @@
-#include "process.h"
+#include "ProgramResult.h"
 #include "sds/sds.h"
 
 #include <stdio.h>
@@ -9,7 +9,7 @@
 
 static sds read_data(int readFd);
 
-void runProcess(const char *filepath) {
+ProgramResult runProgram(const char *filepath) {
     fflush(stdout);
 
     int fds[2] = {0};
@@ -44,7 +44,10 @@ void runProcess(const char *filepath) {
 
         int status;
         wait(&status);
-        printf("child status: %d\n", WEXITSTATUS(status));
+        return (ProgramResult){
+            .exitStatus = WEXITSTATUS(status),
+            .output = data
+        };
     }
 }
 
