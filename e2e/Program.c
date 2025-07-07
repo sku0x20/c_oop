@@ -52,7 +52,7 @@ static sds read_data(const int readFd) {
     sds data = sdsempty(); {
         ssize_t n = 0;
         char buffer[1024];
-        while ((n = read(readFd, buffer, 12))) {
+        while ((n = read(readFd, buffer, 1024))) {
             if (n < 0) {
                 perror("read");
                 close(readFd);
