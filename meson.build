@@ -1,10 +1,12 @@
 project('coop', 'c', version: '0.0.1', default_options: ['c_std=c23'])
 
+sds = files('libs/sds/sds.c')
+
 src_files = run_command(['python3', 'grab_files.py', 'src'], check: true)
 sources = src_files.stdout().strip().split('\n')
 coop = executable(
     'coop',
-    'entrypoint/coop.c', sources,
+    'entrypoint/coop.c', sources, sds,
     include_directories: ['src']
 )
 
@@ -23,7 +25,6 @@ unity = files('libs/unity/unity.c')
 #    test(name, exe)
 #endforeach
 
-sds = files('libs/sds/sds.c')
 
 e2e_files = run_command(['python3', 'grab_files.py', 'e2e'], check : true)
 e2e_sources = e2e_files.stdout().strip().split('\n')
