@@ -30,15 +30,10 @@ void runProcess(const char *filepath) {
 
     if (pid == 0) {
         close(readFd);
-        printf("child pid: %d\n", getpid());
-        fflush(stdout);
-
         dup2(writeFd, STDOUT_FILENO);
         close(writeFd);
-        printf("print to child stdout\n");
-        printf("another message\n");
-        // execl(filepath, nullptr);
-        // perror("execl");
+        execl(filepath, nullptr);
+        perror("execl");
         exit(EXIT_FAILURE);
     } else {
         close(writeFd);
