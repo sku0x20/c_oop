@@ -1,10 +1,13 @@
 #include "process.h"
+#include "sds/sds.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+
+static sds read_data(int readFd);
 
 void runProcess(const char *filepath) {
     fflush(stdout);
@@ -44,18 +47,31 @@ void runProcess(const char *filepath) {
     } else {
         close(writeFd);
         printf("from parent pid: %d\n", pid);
-        ssize_t n = 0;
-        char buffer[1024];
-        if ((n = read(readFd, buffer, 12)) < 0) {
-            printf("read %ld bytes\n", n);
-            perror("read");
-            close(readFd);
-            exit(EXIT_FAILURE);
-        }
-        printf("read %ld bytes\n", n);
-        printf("data %s\n", buffer);
+
+        sds data = read_data(readFd);
+        printf("data '%s' of len %lu\n", data, sdslen(data));
+
         int status;
         wait(&status);
         printf("child status: %d\n", WEXITSTATUS(status));
     }
+}
+
+static sds read_data(const int readFd) {
+    sds data = sdsempty(); {
+        ssize_t n = 0;
+        char buffer[1024];
+        while ((n = read(readFd, buffer, 12))) {
+            if (n < 0) {
+                perror("read");
+                close(readFd);
+                exit(EXIT_FAILURE);
+            }
+            if (n == 0) {
+                break;
+            }
+            data = sdscatlen(data, buffer, n);
+        }
+    }
+    return data;
 }
