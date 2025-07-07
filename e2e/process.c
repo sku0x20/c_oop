@@ -17,17 +17,16 @@ void runProcess(const char *filepath) {
         perror("pipe");
         exit(EXIT_FAILURE);
     }
+    const int readFd = fds[0];
+    const int writeFd = fds[1];
 
     const pid_t pid = fork();
     if (pid < 0) {
-        close(fds[0]);
-        close(fds[1]);
+        close(readFd);
+        close(writeFd);
         perror("fork");
         exit(EXIT_FAILURE);
     }
-
-    const int readFd = fds[0];
-    const int writeFd = fds[1];
 
     if (pid == 0) {
         close(readFd);
