@@ -1,7 +1,7 @@
-#include "NetworkPrinter.h"
-
 #include <stdio.h>
 #include <stdlib.h>
+
+#include "NetworkPrinter.h"
 
 static int print(NetworkPrinter *const this, const char *message);
 

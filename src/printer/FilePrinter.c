@@ -1,6 +1,7 @@
+#include <stdlib.h>
+
 #include "FilePrinter.h"
 
-#include <stdlib.h>
 
 static void initPrinterInterface(FilePrinter *const this);
 

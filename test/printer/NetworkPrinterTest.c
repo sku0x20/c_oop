@@ -1,9 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "NetworkPrinter.h"
 #include "unity/unity.h"
 #include "sds/sds.h"
+
+#include "printer/NetworkPrinter.h"
+#include "printer/Printer.h"
+
 
 void setUp(void) {
 }

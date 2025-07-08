@@ -1,12 +1,13 @@
-#include "FilePrinter.h"
-#include "Printer.h"
-
-#include "libs/unity/unity.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 
+#include "libs/unity/unity.h"
 #include "sds/sds.h"
+
+#include "printer/FilePrinter.h"
+#include "printer/Printer.h"
+
 
 void setUp(void) {
 }
