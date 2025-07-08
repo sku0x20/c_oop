@@ -19,7 +19,7 @@ foreach t : tests
     name = t.replace('/', '_').replace('.c', '')
     exe = executable(
         name,
-        t, sources, unity,
+        t, sources, unity, sds,
         include_directories : ['src', 'libs']
     )
     test(name, exe)
