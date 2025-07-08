@@ -7,4 +7,4 @@ typedef struct ProgramResult {
     sds output;
 } ProgramResult;
 
-ProgramResult runProgram(const char *filepath);
+ProgramResult runProgram(const char *filepath, const char *arg);

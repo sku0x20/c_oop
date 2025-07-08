@@ -9,7 +9,7 @@
 
 static sds read_data(int readFd);
 
-ProgramResult runProgram(const char *filepath) {
+ProgramResult runProgram(const char *filepath, const char *arg) {
     fflush(stdout);
 
     int fds[2] = {0};
@@ -33,7 +33,7 @@ ProgramResult runProgram(const char *filepath) {
         dup2(writeFd, STDOUT_FILENO);
         dup2(writeFd, STDERR_FILENO);
         close(writeFd);
-        execl(filepath, nullptr);
+        execl(filepath, arg, nullptr);
         perror("execl");
         exit(EXIT_FAILURE);
     } else {
