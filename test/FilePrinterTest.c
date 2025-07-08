@@ -23,8 +23,7 @@ int main(void) {
 }
 
 static void printsToFile(void) {
-    // FILE *tmpFile = tmpfile();
-    FILE *tmpFile = fopen("./test.txt", "w+");
+    FILE *tmpFile = tmpfile();
 
     FilePrinter *filePrinter = NewFilePrinter(tmpFile);
     int result = filePrinter->print(filePrinter, "printing to file: something \n");
@@ -44,7 +43,6 @@ static sds readAllData(FILE *file) {
         char buffer[BUFFER_SIZE];
         while (true) {
             n = fread(buffer, 1, BUFFER_SIZE, file);
-            printf("n = %zu\n", n);
             if (n != BUFFER_SIZE && ferror(file)) {
                 fprintf(stderr, "fread error\n");
                 fclose(file);
