@@ -19,7 +19,7 @@ void NewFilePrinterInto(
 }
 
 static int print(FilePrinter *const this, const char *message) {
-    // fprintf(this->file, "%s", message);
-    // fflush(this->file);
+    fprintf(this->file, "%s", message);
+    fflush(this->file);
     return 0;
 }

@@ -14,7 +14,7 @@ void tearDown(void) {
 
 static void printsToFile(void);
 
-static sds readData(FILE *file);
+static sds readAllData(FILE *file);
 
 int main(void) {
     UNITY_BEGIN();
@@ -23,25 +23,29 @@ int main(void) {
 }
 
 static void printsToFile(void) {
-    FILE *tmpFile = tmpfile();
+    // FILE *tmpFile = tmpfile();
+    FILE *tmpFile = fopen("./test.txt", "w+");
 
     FilePrinter *filePrinter = NewFilePrinter(tmpFile);
     int result = filePrinter->print(filePrinter, "printing to file: something \n");
     TEST_ASSERT_EQUAL(0, result);
 
-    // sds data = readData(tmpFile);
+    sds data = readAllData(tmpFile);
+    printf("data = '%s' \n", data);
     // TEST_ASSERT_EQUAL_STRING("printing to file: something \n", data);
     fclose(tmpFile);
 }
 
 #define  BUFFER_SIZE  1024
 
-static sds readData(FILE *file) {
+static sds readAllData(FILE *file) {
+    fseek(file, 0, SEEK_SET);
     sds data = sdsempty(); {
         size_t n = 0;
         char buffer[BUFFER_SIZE];
         while (true) {
             n = fread(buffer, 1, BUFFER_SIZE, file);
+            printf("n = %zu\n", n);
             if (n != BUFFER_SIZE && ferror(file)) {
                 fprintf(stderr, "fread error\n");
                 fclose(file);
@@ -49,7 +53,6 @@ static sds readData(FILE *file) {
             }
             data = sdscatlen(data, buffer, n);
             if (n != BUFFER_SIZE && feof(file)) {
-                data = sdscatlen(data, buffer, n);
                 break;
             }
         }
