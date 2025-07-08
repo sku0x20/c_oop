@@ -6,6 +6,8 @@ static char *cString(ManipulatableString *const this);
 
 static void reverse(ManipulatableString *const this);
 
+static void printTo(ManipulatableString *const this, Printer *const printer);
+
 ManipulatableString *NewManipulatableString(const char *string) {
     ManipulatableString *manipulatableString = malloc(sizeof(ManipulatableString));
     NewManipulatableStringInto(manipulatableString, string);
@@ -19,6 +21,11 @@ void NewManipulatableStringInto(
     manipulatableString->string = sdsnew(string);
     manipulatableString->cString = cString;
     manipulatableString->reverse = reverse;
+    manipulatableString->printTo = printTo;
+}
+
+static void printTo(ManipulatableString *const this, Printer *const printer) {
+    printer->print(printer, this->string);
 }
 
 static char *cString(ManipulatableString *const this) {

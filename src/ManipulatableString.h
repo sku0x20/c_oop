@@ -10,7 +10,7 @@ typedef struct ManipulatableString {
 
     void (*reverse)(struct ManipulatableString *const this);
 
-    // void (*printTo)(struct StringManipulator *const this, Printer *const printer);
+    void (*printTo)(struct ManipulatableString *const this, Printer *const printer);
 } ManipulatableString;
 
 ManipulatableString *NewManipulatableString(const char *string);
