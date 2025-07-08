@@ -12,6 +12,10 @@ dirs = sys.argv[1:]
 
 buildFile = Path("meson.build")
 def touchBuild(event):
+    if event.src_path.endswith("~"):
+        # print(f"ignoring {event.src_path}")
+        return
+    print(f"changed {event.src_path}")
     buildFile.touch()
 
 class CustomEventHandler(FileSystemEventHandler):
