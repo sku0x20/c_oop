@@ -11,16 +11,16 @@ if len(sys.argv) < 2:
 dirs = sys.argv[1:]
 
 buildFile = Path("meson.build")
-def touchBuild():
+def touchBuild(event):
     buildFile.touch()
 
 class CustomEventHandler(FileSystemEventHandler):
     def on_created(self, event: FileSystemEvent) -> None:
-        touchBuild()
+        touchBuild(event)
     def on_deleted(self, event: FileSystemEvent) -> None:
-        touchBuild()
+        touchBuild(event)
     def on_moved(self, event: FileSystemEvent) -> None:
-        touchBuild()
+        touchBuild(event)
 
 event_handler = CustomEventHandler()
 observer = Observer()
