@@ -1,3 +1,3 @@
 #pragma once
 
-void Init(char *argv[], int argc);
+void Init(int argc, char *argv[]);

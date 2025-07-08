@@ -1,8 +1,6 @@
-#include <stdio.h>
+#include "Init.h"
 
-int main(void) {
-    printf("running coop\n");
-    fflush(stdout);
-    fprintf(stderr, "some error!!!\n");
+int main(int argc, char *argv[]) {
+    Init(argc, argv);
     return 0;
 }

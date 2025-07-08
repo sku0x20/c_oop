@@ -39,6 +39,7 @@ ProgramResult runProgram(const char *filepath, const char *arg) {
     } else {
         close(writeFd);
         sds data = read_data(readFd);
+        printf(data);
         int status;
         wait(&status);
         return (ProgramResult){

@@ -7,12 +7,12 @@
 #include "printer/Printer.h"
 #include "printer/NetworkPrinter.h"
 
-void Init(char *argv[], int argc) {
-    if (argc < 2) {
-        fprintf(stderr, "usage: %s <file>\n", argv[0]);
+void Init(int argc, char *argv[]) {
+    if (argc < 1) {
+        fprintf(stderr, "usage: 'string'\n");
         exit(EXIT_FAILURE);
     }
-    char *input = argv[1];
+    char *input = argv[0];
     ManipulatableString *string = NewManipulatableString(input);
     Printer *printer = (Printer *) NewNetworkPrinter();
     string->printTo(string, printer);
