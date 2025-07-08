@@ -19,6 +19,6 @@ int main(void) {
 
 static void reverse(void) {
     ManipulatableString *string = NewManipulatableString("hello world");
-    // string->reverse(string);
+    string->reverse(string);
     TEST_ASSERT_EQUAL_STRING("dlrow olleh", string->cString(string));
 }
