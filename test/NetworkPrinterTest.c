@@ -13,15 +13,14 @@ void tearDown(void) {
 
 static void printsToStdout(void);
 
-//
-// static void viaPrinterInterface(void);
+static void viaPrinterInterface(void);
 
 static sds readAllData(FILE *file);
 
 int main(void) {
     UNITY_BEGIN();
     RUN_TEST(printsToStdout);
-    // RUN_TEST(viaPrinterInterface);
+    RUN_TEST(viaPrinterInterface);
     return UNITY_END();
 }
 
@@ -38,21 +37,20 @@ static void printsToStdout(void) {
     fclose(tmpFile);
 }
 
-/*
 static void viaPrinterInterface(void) {
     FILE *tmpFile = tmpfile();
 
-    FilePrinter *filePrinter = NewFilePrinter(tmpFile);
+    NetworkPrinter *networkPrinter = NewNetworkPrinter();
 
-    Printer *printer = (Printer *) filePrinter;
-    int result = printer->print(printer, "printing to file: something \n");
+    Printer *printer = (Printer *) networkPrinter;
+    int result = printer->print(printer, "printing to stdout: something \n");
     TEST_ASSERT_EQUAL(0, result);
 
     sds data = readAllData(tmpFile);
-    TEST_ASSERT_EQUAL_STRING("printing to file: something \n", data);
+    TEST_ASSERT_EQUAL_STRING("printing to stdout: something \n", data);
     fclose(tmpFile);
 }
-*/
+
 #define  BUFFER_SIZE  1024
 
 static sds readAllData(FILE *file) {
