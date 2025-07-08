@@ -13,7 +13,10 @@ void Init(int argc, char *argv[]) {
         exit(EXIT_FAILURE);
     }
     char *input = argv[0];
-    ManipulatableString *string = NewManipulatableString(input);
+
     Printer *printer = (Printer *) NewNetworkPrinter();
+
+    ManipulatableString *string = NewManipulatableString(input);
+    string->reverse(string);
     string->printTo(string, printer);
 }
