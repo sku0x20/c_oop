@@ -4,5 +4,5 @@
  * Printer Interface
  */
 typedef struct Printer {
-    int (*print)(const char *message);
+    int (*print)(struct Printer *const this, const char *message);
 } Printer;
