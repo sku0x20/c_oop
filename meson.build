@@ -7,7 +7,7 @@ sources = src_files.stdout().strip().split('\n')
 coop = executable(
     'coop',
     'entrypoint/coop.c', sources, sds,
-    include_directories: ['src']
+    include_directories : ['src', 'libs']
 )
 
 
