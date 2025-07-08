@@ -1,4 +1,6 @@
 #include "FilePrinter.h"
+#include "Printer.h"
+
 #include "libs/unity/unity.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -14,11 +16,14 @@ void tearDown(void) {
 
 static void printsToFile(void);
 
+static void viaPrinterInterface(void);
+
 static sds readAllData(FILE *file);
 
 int main(void) {
     UNITY_BEGIN();
     RUN_TEST(printsToFile);
+    RUN_TEST(viaPrinterInterface);
     return UNITY_END();
 }
 
@@ -27,6 +32,20 @@ static void printsToFile(void) {
 
     FilePrinter *filePrinter = NewFilePrinter(tmpFile);
     int result = filePrinter->print(filePrinter, "printing to file: something \n");
+    TEST_ASSERT_EQUAL(0, result);
+
+    sds data = readAllData(tmpFile);
+    TEST_ASSERT_EQUAL_STRING("printing to file: something \n", data);
+    fclose(tmpFile);
+}
+
+static void viaPrinterInterface(void) {
+    FILE *tmpFile = tmpfile();
+
+    FilePrinter *filePrinter = NewFilePrinter(tmpFile);
+
+    Printer *printer = (Printer *) filePrinter;
+    int result = printer->print(printer, "printing to file: something \n");
     TEST_ASSERT_EQUAL(0, result);
 
     sds data = readAllData(tmpFile);
