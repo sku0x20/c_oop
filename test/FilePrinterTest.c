@@ -31,8 +31,7 @@ static void printsToFile(void) {
     TEST_ASSERT_EQUAL(0, result);
 
     sds data = readAllData(tmpFile);
-    printf("data = '%s' \n", data);
-    // TEST_ASSERT_EQUAL_STRING("printing to file: something \n", data);
+    TEST_ASSERT_EQUAL_STRING("printing to file: something \n", data);
     fclose(tmpFile);
 }
 
