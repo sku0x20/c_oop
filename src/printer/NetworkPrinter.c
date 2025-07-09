@@ -22,7 +22,11 @@ static void initPrinterInterface(NetworkPrinter *const this) {
 static void freeThis(NetworkPrinter *this);
 
 static void debugPrint(Debug *const this) {
-    fprintf(stderr, "debug\n");
+    fprintf(stderr, "debug = %p\n", this);
+    char *head = (char *) this;
+    head -= sizeof(Printer);
+    NetworkPrinter *networkPrinter = (NetworkPrinter *) head;
+    fprintf(stderr, "NetworkPrinter = %p\n", networkPrinter);
 }
 
 static Debug *getDebug(NetworkPrinter *const this) {
