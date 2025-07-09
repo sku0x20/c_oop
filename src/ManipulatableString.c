@@ -2,11 +2,11 @@
 
 #include <stdlib.h>
 
-static char *cString(ManipulatableString *const this);
+static char *cString(ManipulatableString *this);
 
-static void reverse(ManipulatableString *const this);
+static void reverse(ManipulatableString *this);
 
-static void printTo(ManipulatableString *const this, Printer *const printer);
+static void printTo(ManipulatableString *this, Printer *printer);
 
 static void freeThis(ManipulatableString *this);
 
