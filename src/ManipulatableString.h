@@ -6,16 +6,13 @@
 typedef struct ManipulatableString {
     sds string;
 
-    char *(*cString)(struct ManipulatableString *const this);
+    void (*free)(struct ManipulatableString *this);
 
-    void (*reverse)(struct ManipulatableString *const this);
+    char *(*cString)(struct ManipulatableString *this);
 
-    void (*printTo)(struct ManipulatableString *const this, Printer *const printer);
+    void (*reverse)(struct ManipulatableString *this);
+
+    void (*printTo)(struct ManipulatableString *this, Printer *printer);
 } ManipulatableString;
 
 ManipulatableString *NewManipulatableString(const char *string);
-
-void NewManipulatableStringInto(
-    ManipulatableString *manipulatableString,
-    const char *string
-);

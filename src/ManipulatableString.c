@@ -2,26 +2,27 @@
 
 #include <stdlib.h>
 
-static char *cString(ManipulatableString *const this);
+static char *cString(ManipulatableString *this);
 
-static void reverse(ManipulatableString *const this);
+static void reverse(ManipulatableString *this);
 
-static void printTo(ManipulatableString *const this, Printer *const printer);
+static void printTo(ManipulatableString *this, Printer *printer);
+
+static void freeThis(ManipulatableString *this);
 
 ManipulatableString *NewManipulatableString(const char *string) {
     ManipulatableString *manipulatableString = malloc(sizeof(ManipulatableString));
-    NewManipulatableStringInto(manipulatableString, string);
-    return manipulatableString;
-}
-
-void NewManipulatableStringInto(
-    ManipulatableString *manipulatableString,
-    const char *string
-) {
     manipulatableString->string = sdsnew(string);
     manipulatableString->cString = cString;
     manipulatableString->reverse = reverse;
     manipulatableString->printTo = printTo;
+    manipulatableString->free = freeThis;
+    return manipulatableString;
+}
+
+static void freeThis(ManipulatableString *const this) {
+    sdsfree(this->string);
+    free(this);
 }
 
 static void printTo(ManipulatableString *const this, Printer *const printer) {

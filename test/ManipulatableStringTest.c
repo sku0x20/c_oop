@@ -27,6 +27,8 @@ static void reverse(void) {
     ManipulatableString *string = NewManipulatableString("hello world");
     string->reverse(string);
     TEST_ASSERT_EQUAL_STRING("dlrow olleh", string->cString(string));
+    string->free(string);
+    string = nullptr;
 }
 
 static sds printedString = nullptr;
@@ -49,4 +51,6 @@ static void printTo() {
     string->printTo(string, printer);
     TEST_ASSERT_EQUAL_STRING("hello world via printer", printedString);
     free(printer);
+    string->free(string);
+    string = nullptr;
 }

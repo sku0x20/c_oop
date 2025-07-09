@@ -48,8 +48,17 @@ its opinionated approach to do
 - struct defines interface
 - interfaces have only methods
 - interfaces cannot be initiated
-- types are said to implement an interface when they embed an interface as the first member
-- each type has a constructor which takes care of mapping methods and initializing the object instance
+- types have minimum one constructor that initializes and returns the object
+- objects should be initialized by the constructor
+- initialization should take care of method mapping
+- each type has a free method
+  - it frees the resources as well as itself
+- methods' implementations should make 'this' as a const pointer
+  - better to take every pointer parameter as a const pointer
+- types are said to implement an interface
+  - if they have a method that can cast to that interface
+  - type has an embedded interface struct
+  - the casting method returns a pointer to that embedded struct
 
 ## resources
 
@@ -57,5 +66,4 @@ its opinionated approach to do
 
 ## limitations
 
-- type cannot implement multiple interfaces
-- freeing is hard
+- cannot initiate objects on the stack

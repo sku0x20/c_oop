@@ -1,18 +1,21 @@
 #pragma once
 #include <stdio.h>
 #include "Printer.h"
+#include "debug/Debug.h"
 
 typedef struct FilePrinter {
-    Printer printer;
+    Printer _printer;
+    Debug _debug;
 
     FILE *file;
 
-    int (*print)(struct FilePrinter *const this, const char *message);
+    Printer *(*printer)(struct FilePrinter *this);
+
+    Debug *(*debug)(struct FilePrinter *this);
+
+    void (*free)(struct FilePrinter *this);
+
+    int (*print)(struct FilePrinter *this, const char *message);
 } FilePrinter;
 
 FilePrinter *NewFilePrinter(FILE *file);
-
-void NewFilePrinterInto(
-    FilePrinter *filePrinter,
-    FILE *file
-);

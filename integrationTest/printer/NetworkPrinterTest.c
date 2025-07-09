@@ -6,6 +6,7 @@
 
 #include "printer/NetworkPrinter.h"
 #include "printer/Printer.h"
+#include "debug/Debug.h"
 
 
 void setUp(void) {
@@ -18,45 +19,67 @@ static void printsToStdout(void);
 
 static void viaPrinterInterface(void);
 
+static void printsDebug(void);
+
 static sds readAllData(FILE *file);
 
 int main(void) {
     UNITY_BEGIN();
     RUN_TEST(printsToStdout);
     RUN_TEST(viaPrinterInterface);
+    RUN_TEST(printsDebug);
     return UNITY_END();
 }
 
 static void printsToStdout(void) {
-    FILE *tmpFile = tmpfile();
-    stdout = tmpFile;
+    freopen("networkPrinter.out.txt", "w+", stdout);
 
     NetworkPrinter *networkPrinter = NewNetworkPrinter();
     int result = networkPrinter->print(networkPrinter, "printing to stdout: something \n");
     TEST_ASSERT_EQUAL(0, result);
 
-    sds data = readAllData(tmpFile);
+    sds data = readAllData(stdout);
     TEST_ASSERT_EQUAL_STRING("printing to stdout: something \n", data);
-    fclose(tmpFile);
+
+    networkPrinter->free(networkPrinter);
+    networkPrinter = nullptr;
+
+    fclose(stdout);
 }
 
 static void viaPrinterInterface(void) {
-    FILE *tmpFile = tmpfile();
+    freopen("networkPrinter.out.txt", "w+", stdout);
 
     NetworkPrinter *networkPrinter = NewNetworkPrinter();
 
-    Printer *printer = (Printer *) networkPrinter;
+    Printer *printer = networkPrinter->printer(networkPrinter);
     int result = printer->print(printer, "printing to stdout: something \n");
     TEST_ASSERT_EQUAL(0, result);
 
-    sds data = readAllData(tmpFile);
+    sds data = readAllData(stdout);
     TEST_ASSERT_EQUAL_STRING("printing to stdout: something \n", data);
-    fclose(tmpFile);
+
+    networkPrinter->free(networkPrinter);
+    networkPrinter = nullptr;
+
+    fclose(stdout);
+}
+
+static void printsDebug(void) {
+    NetworkPrinter *networkPrinter = NewNetworkPrinter();
+
+    Debug *debug = networkPrinter->debug(networkPrinter);
+    // should print debug statements to stdout
+    debug->print(debug);
+
+    networkPrinter->free(networkPrinter);
+    networkPrinter = nullptr;
 }
 
 #define  BUFFER_SIZE  1024
 
 static sds readAllData(FILE *file) {
+    clearerr(file);
     fseek(file, 0, SEEK_SET);
     sds data = sdsempty(); {
         size_t n = 0;
