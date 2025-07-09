@@ -54,3 +54,8 @@ its opinionated approach to do
 ## resources
 
 - https://youtu.be/bZO0A1tj2MI
+
+## limitations
+
+- type cannot implement multiple interfaces
+- freeing is hard
