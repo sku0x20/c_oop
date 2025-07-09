@@ -37,7 +37,10 @@ static void printsToFile(void) {
 
     sds data = readAllData(tmpFile);
     TEST_ASSERT_EQUAL_STRING("printing to file: something \n", data);
-    fclose(tmpFile);
+
+    // this will close the tmpFile
+    filePrinter->free(filePrinter);
+    filePrinter = nullptr;
 }
 
 static void viaPrinterInterface(void) {
@@ -51,7 +54,10 @@ static void viaPrinterInterface(void) {
 
     sds data = readAllData(tmpFile);
     TEST_ASSERT_EQUAL_STRING("printing to file: something \n", data);
-    fclose(tmpFile);
+
+    // this will close the tmpFile
+    filePrinter->free(filePrinter);
+    filePrinter = nullptr;
 }
 
 #define  BUFFER_SIZE  1024

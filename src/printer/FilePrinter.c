@@ -3,7 +3,7 @@
 #include "FilePrinter.h"
 
 
-static int print(FilePrinter *const this, const char *message);
+static int print(FilePrinter *this, const char *message);
 
 static int printerPrint(Printer *const this, const char *message) {
     FilePrinter *filePrinter = (FilePrinter *) this;
@@ -14,12 +14,20 @@ static void initPrinterInterface(FilePrinter *const this) {
     this->printer.print = printerPrint;
 }
 
+static void freeThis(FilePrinter *this);
+
 FilePrinter *NewFilePrinter(FILE *file) {
     FilePrinter *filePrinter = malloc(sizeof(FilePrinter));
     filePrinter->file = file;
     filePrinter->print = print;
+    filePrinter->free = freeThis;
     initPrinterInterface(filePrinter);
     return filePrinter;
+}
+
+static void freeThis(FilePrinter *const this) {
+    fclose(this->file);
+    free(this);
 }
 
 static int print(FilePrinter *const this, const char *message) {
