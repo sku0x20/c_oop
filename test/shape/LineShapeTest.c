@@ -38,10 +38,14 @@ static void drawLine() {
     Printer *printer = createFakePrinter();
 
     LineShape *line = NewLineShape(10);
-    // line->draw(line, printer);
-    // TEST_ASSERT_EQUAL_STRING("----------", printedString);
-    line->free(line);
-    line = nullptr;
+
+    Shape *shape = line->shape(line);
+    shape->draw(shape, printer);
+    TEST_ASSERT_EQUAL_STRING("----------", printedString);
+    // shape->free(shape);
+
+    // shape = nullptr;
+    // line = nullptr;
 
     free(printer);
 }
