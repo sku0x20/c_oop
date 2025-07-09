@@ -8,13 +8,21 @@ static void reverse(ManipulatableString *const this);
 
 static void printTo(ManipulatableString *const this, Printer *const printer);
 
+static void freeThis(ManipulatableString *this);
+
 ManipulatableString *NewManipulatableString(const char *string) {
     ManipulatableString *manipulatableString = malloc(sizeof(ManipulatableString));
     manipulatableString->string = sdsnew(string);
     manipulatableString->cString = cString;
     manipulatableString->reverse = reverse;
     manipulatableString->printTo = printTo;
+    manipulatableString->free = freeThis;
     return manipulatableString;
+}
+
+static void freeThis(ManipulatableString *const this) {
+    sdsfree(this->string);
+    free(this);
 }
 
 static void printTo(ManipulatableString *const this, Printer *const printer) {
