@@ -1,10 +1,13 @@
 #pragma once
 
 #include "Shape.h"
+#include "sds/sds.h"
+
 
 typedef struct LineShape {
     Shape _shape;
 
+    sds pattern;
     int len;
 
     Shape *(*shape)(struct LineShape *this);
@@ -14,4 +17,8 @@ typedef struct LineShape {
     void (*draw)(struct LineShape *this, Printer *printer);
 } LineShape;
 
-LineShape *NewLineShape(int len);
+/**
+ * pattern is owned by LineShape
+ * move semantics
+ */
+LineShape *NewLineShape(sds pattern, int len);

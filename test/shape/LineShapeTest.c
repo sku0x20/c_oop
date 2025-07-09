@@ -37,7 +37,8 @@ static Printer *createFakePrinter(void) {
 static void drawLine() {
     Printer *printer = createFakePrinter();
 
-    LineShape *line = NewLineShape(10);
+    sds pattern = sdsnew("-");
+    LineShape *line = NewLineShape(pattern, 10);
 
     Shape *shape = line->shape(line);
     shape->draw(shape, printer);

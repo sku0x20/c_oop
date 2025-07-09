@@ -1,5 +1,4 @@
 #include "LineShape.h"
-#include "sds/sds.h"
 
 #include <stdlib.h>
 
@@ -12,7 +11,7 @@ static void drawShape(Shape *const this, Printer *const printer) {
     LineShape *line = (LineShape *) this;
     sds lineString = sdsempty();
     for (int i = 0; i < line->len; ++i) {
-        sdscat(lineString, "-");
+        sdscat(lineString, line->pattern);
     }
     printer->print(printer, lineString);
 }
@@ -25,8 +24,9 @@ static Shape *getShape(LineShape *const this) {
     return (Shape *) this;
 }
 
-LineShape *NewLineShape(int len) {
+LineShape *NewLineShape(sds pattern, int len) {
     LineShape *line = malloc(sizeof(LineShape));
+    line->pattern = pattern;
     line->len = len;
     line->draw = drawLine;
     line->free = freeThis;
