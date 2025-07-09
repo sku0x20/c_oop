@@ -3,7 +3,7 @@
 #include "Printer.h"
 
 typedef struct FilePrinter {
-    Printer printer;
+    Printer _printer;
 
     FILE *file;
 
