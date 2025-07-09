@@ -11,7 +11,7 @@ static int printerPrint(Printer *const this, const char *message) {
 }
 
 static void initPrinterInterface(NetworkPrinter *const this) {
-    this->printer.print = printerPrint;
+    this->_printer.print = printerPrint;
 }
 
 static void freeThis(NetworkPrinter *this);

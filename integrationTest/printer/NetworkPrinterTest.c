@@ -49,6 +49,7 @@ static void viaPrinterInterface(void) {
     NetworkPrinter *networkPrinter = NewNetworkPrinter();
 
     Printer *printer = (Printer *) networkPrinter;
+    // Printer *printer = networkPrinter->printer(networkPrinter);
     int result = printer->print(printer, "printing to stdout: something \n");
     TEST_ASSERT_EQUAL(0, result);
 
