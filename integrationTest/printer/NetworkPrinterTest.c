@@ -6,6 +6,7 @@
 
 #include "printer/NetworkPrinter.h"
 #include "printer/Printer.h"
+#include "debug/Debug.h"
 
 
 void setUp(void) {
@@ -18,12 +19,15 @@ static void printsToStdout(void);
 
 static void viaPrinterInterface(void);
 
+static void printsDebug(void);
+
 static sds readAllData(FILE *file);
 
 int main(void) {
     UNITY_BEGIN();
     RUN_TEST(printsToStdout);
     RUN_TEST(viaPrinterInterface);
+    RUN_TEST(printsDebug);
     return UNITY_END();
 }
 
@@ -59,6 +63,17 @@ static void viaPrinterInterface(void) {
     networkPrinter = nullptr;
 
     fclose(stdout);
+}
+
+static void printsDebug(void) {
+    NetworkPrinter *networkPrinter = NewNetworkPrinter();
+
+    Debug *debug = networkPrinter->debug(networkPrinter);
+    // should print debug statements to stdout
+    debug->print(debug);
+
+    networkPrinter->free(networkPrinter);
+    networkPrinter = nullptr;
 }
 
 #define  BUFFER_SIZE  1024

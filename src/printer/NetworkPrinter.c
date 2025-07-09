@@ -21,11 +21,23 @@ static void initPrinterInterface(NetworkPrinter *const this) {
 
 static void freeThis(NetworkPrinter *this);
 
+static void debugPrint(Debug *const this) {
+    fprintf(stderr, "debug\n");
+}
+
+static Debug *getDebug(NetworkPrinter *const this) {
+    char *head = (char *) this;
+    head += sizeof(Printer);
+    return (Debug *) head;
+}
+
 NetworkPrinter *NewNetworkPrinter() {
     NetworkPrinter *networkPrinter = malloc(sizeof(NetworkPrinter));
     networkPrinter->print = print;
     networkPrinter->free = freeThis;
     initPrinterInterface(networkPrinter);
+    networkPrinter->_debug.print = debugPrint;
+    networkPrinter->debug = getDebug;
     return networkPrinter;
 }
 
