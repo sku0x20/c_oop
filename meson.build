@@ -25,6 +25,18 @@ foreach t : tests
     test(name, exe)
 endforeach
 
+it_files = run_command(['python3', 'grab_files.py', 'integrationTest'], check : true)
+it = it_files.stdout().strip().split('\n')
+foreach t : it
+    name = t.replace('/', '_').replace('.c', '')
+    exe = executable(
+        name,
+        t, sources, unity, sds,
+        include_directories : ['src', 'libs']
+    )
+    test(name, exe)
+endforeach
+
 
 e2e_files = run_command(['python3', 'grab_files.py', 'e2e'], check : true)
 e2e_sources = e2e_files.stdout().strip().split('\n')
