@@ -10,7 +10,12 @@ static int printerPrint(Printer *const this, const char *message) {
     return filePrinter->print(filePrinter, message);
 }
 
+static Printer *getPrinter(NetworkPrinter *const this) {
+    return (Printer *) this;
+}
+
 static void initPrinterInterface(NetworkPrinter *const this) {
+    this->printer = getPrinter;
     this->_printer.print = printerPrint;
 }
 
