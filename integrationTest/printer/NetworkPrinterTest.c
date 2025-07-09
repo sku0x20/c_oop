@@ -28,20 +28,20 @@ int main(void) {
 }
 
 static void printsToStdout(void) {
-    FILE *tmpFile = tmpfile();
-    stdout = tmpFile;
+    freopen("networkPrinter.out.txt", "w+", stdout);
 
     NetworkPrinter *networkPrinter = NewNetworkPrinter();
     int result = networkPrinter->print(networkPrinter, "printing to stdout: something \n");
     TEST_ASSERT_EQUAL(0, result);
 
-    sds data = readAllData(tmpFile);
+    sds data = readAllData(stdout);
     TEST_ASSERT_EQUAL_STRING("printing to stdout: something \n", data);
-    fclose(tmpFile);
+
+    fclose(stdout);
 }
 
 static void viaPrinterInterface(void) {
-    FILE *tmpFile = tmpfile();
+    freopen("networkPrinter.out.txt", "w+", stdout);
 
     NetworkPrinter *networkPrinter = NewNetworkPrinter();
 
@@ -49,14 +49,16 @@ static void viaPrinterInterface(void) {
     int result = printer->print(printer, "printing to stdout: something \n");
     TEST_ASSERT_EQUAL(0, result);
 
-    sds data = readAllData(tmpFile);
+    sds data = readAllData(stdout);
     TEST_ASSERT_EQUAL_STRING("printing to stdout: something \n", data);
-    fclose(tmpFile);
+
+    fclose(stdout);
 }
 
 #define  BUFFER_SIZE  1024
 
 static sds readAllData(FILE *file) {
+    clearerr(file);
     fseek(file, 0, SEEK_SET);
     sds data = sdsempty(); {
         size_t n = 0;
