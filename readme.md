@@ -53,6 +53,8 @@ its opinionated approach to do
 - initialization should take care of method mapping
 - each type has a free method
   - it frees the resources as well as itself
+- methods' implementations should make 'this' as a const pointer
+  - better to take every pointer parameter as a const pointer
 - types are said to implement an interface
   - if they have a method that can cast to that interface
   - type has an embedded interface struct
