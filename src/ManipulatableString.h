@@ -14,8 +14,3 @@ typedef struct ManipulatableString {
 } ManipulatableString;
 
 ManipulatableString *NewManipulatableString(const char *string);
-
-void NewManipulatableStringInto(
-    ManipulatableString *manipulatableString,
-    const char *string
-);

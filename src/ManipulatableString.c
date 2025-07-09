@@ -10,18 +10,11 @@ static void printTo(ManipulatableString *const this, Printer *const printer);
 
 ManipulatableString *NewManipulatableString(const char *string) {
     ManipulatableString *manipulatableString = malloc(sizeof(ManipulatableString));
-    NewManipulatableStringInto(manipulatableString, string);
-    return manipulatableString;
-}
-
-void NewManipulatableStringInto(
-    ManipulatableString *manipulatableString,
-    const char *string
-) {
     manipulatableString->string = sdsnew(string);
     manipulatableString->cString = cString;
     manipulatableString->reverse = reverse;
     manipulatableString->printTo = printTo;
+    return manipulatableString;
 }
 
 static void printTo(ManipulatableString *const this, Printer *const printer) {
