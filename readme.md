@@ -52,7 +52,15 @@ its opinionated approach to do
 - objects should be initialized by the constructor
 - initialization should take care of method mapping
 - each type has a free method
--
+  - it frees the resources as well as itself
+  - it changes the 'this' pointer to nullptr or equivalent
+- all methods have 'this' as a const pointer
+  - so they don't change the pointer location
+  - free method is exempted from this
+- types are said to implement an interface
+  - if they have a method that can cast to that interface
+  - type has an embedded interface struct
+  - the casting method returns a pointer to that embedded struct
 
 ## resources
 
