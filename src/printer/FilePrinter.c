@@ -10,8 +10,13 @@ static int printerPrint(Printer *const this, const char *message) {
     return filePrinter->print(filePrinter, message);
 }
 
+static Printer *getPrinter(FilePrinter *const this) {
+    return (Printer *) this;
+}
+
 static void initPrinterInterface(FilePrinter *const this) {
     this->_printer.print = printerPrint;
+    this->printer = getPrinter;
 }
 
 static void freeThis(FilePrinter *this);

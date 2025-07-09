@@ -7,6 +7,8 @@ typedef struct FilePrinter {
 
     FILE *file;
 
+    Printer *(*printer)(struct FilePrinter *this);
+
     void (*free)(struct FilePrinter *this);
 
     int (*print)(struct FilePrinter *this, const char *message);
