@@ -21,12 +21,29 @@ static void initPrinterInterface(FilePrinter *const this) {
 
 static void freeThis(FilePrinter *this);
 
+static void debugPrint(Debug *const this) {
+    fprintf(stderr, "debug = %p\n", this);
+    char *head = (char *) this;
+    head -= sizeof(Printer);
+    FilePrinter *filePrinter = (FilePrinter *) head;
+    fprintf(stderr, "FilePrinter = %p\n", filePrinter);
+    fprintf(stderr, "file = %p\n", filePrinter->file);
+}
+
+static Debug *getDebug(FilePrinter *const this) {
+    this->_debug.print = debugPrint;
+    char *head = (char *) this;
+    head += sizeof(Printer);
+    return (Debug *) head;
+}
+
 FilePrinter *NewFilePrinter(FILE *file) {
     FilePrinter *filePrinter = malloc(sizeof(FilePrinter));
     filePrinter->file = file;
     filePrinter->print = print;
     filePrinter->free = freeThis;
     initPrinterInterface(filePrinter);
+    filePrinter->debug = getDebug;
     return filePrinter;
 }
 

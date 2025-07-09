@@ -7,6 +7,7 @@
 
 #include "printer/FilePrinter.h"
 #include "printer/Printer.h"
+#include "debug/Debug.h"
 
 
 void setUp(void) {
@@ -19,12 +20,15 @@ static void printsToFile(void);
 
 static void viaPrinterInterface(void);
 
+static void printsDebug(void);
+
 static sds readAllData(FILE *file);
 
 int main(void) {
     UNITY_BEGIN();
     RUN_TEST(printsToFile);
     RUN_TEST(viaPrinterInterface);
+    RUN_TEST(printsDebug);
     return UNITY_END();
 }
 
@@ -56,6 +60,17 @@ static void viaPrinterInterface(void) {
     TEST_ASSERT_EQUAL_STRING("printing to file: something \n", data);
 
     // this will close the tmpFile
+    filePrinter->free(filePrinter);
+    filePrinter = nullptr;
+}
+
+static void printsDebug(void) {
+    FilePrinter *filePrinter = NewFilePrinter(stdout);
+
+    Debug *debug = filePrinter->debug(filePrinter);
+    // should print debug statements to stderr
+    debug->print(debug);
+
     filePrinter->free(filePrinter);
     filePrinter = nullptr;
 }
