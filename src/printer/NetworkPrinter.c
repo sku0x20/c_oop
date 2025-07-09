@@ -14,9 +14,12 @@ static void initPrinterInterface(NetworkPrinter *const this) {
     this->printer.print = printerPrint;
 }
 
+static void freeThis(NetworkPrinter *this);
+
 NetworkPrinter *NewNetworkPrinter() {
     NetworkPrinter *networkPrinter = malloc(sizeof(NetworkPrinter));
     networkPrinter->print = print;
+    networkPrinter->free = freeThis;
     initPrinterInterface(networkPrinter);
     return networkPrinter;
 }
@@ -25,4 +28,8 @@ static int print(NetworkPrinter *const this, const char *message) {
     fprintf(stdout, "%s", message);
     fflush(stdout);
     return 0;
+}
+
+static void freeThis(NetworkPrinter *const this) {
+    free(this);
 }

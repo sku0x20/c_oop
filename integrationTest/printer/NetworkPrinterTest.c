@@ -37,6 +37,9 @@ static void printsToStdout(void) {
     sds data = readAllData(stdout);
     TEST_ASSERT_EQUAL_STRING("printing to stdout: something \n", data);
 
+    networkPrinter->free(networkPrinter);
+    networkPrinter = nullptr;
+
     fclose(stdout);
 }
 
@@ -51,6 +54,9 @@ static void viaPrinterInterface(void) {
 
     sds data = readAllData(stdout);
     TEST_ASSERT_EQUAL_STRING("printing to stdout: something \n", data);
+
+    networkPrinter->free(networkPrinter);
+    networkPrinter = nullptr;
 
     fclose(stdout);
 }
