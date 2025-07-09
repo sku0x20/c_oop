@@ -9,7 +9,3 @@ typedef struct NetworkPrinter {
 
 
 NetworkPrinter *NewNetworkPrinter();
-
-void NewNetworkPrinterInto(
-    NetworkPrinter *networkPrinter
-);
