@@ -4,7 +4,7 @@
 typedef struct NetworkPrinter {
     Printer printer;
 
-    int (*print)(struct NetworkPrinter *const this, const char *message);
+    int (*print)(struct NetworkPrinter *this, const char *message);
 } NetworkPrinter;
 
 

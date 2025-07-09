@@ -3,7 +3,7 @@
 
 #include "NetworkPrinter.h"
 
-static int print(NetworkPrinter *const this, const char *message);
+static int print(NetworkPrinter *this, const char *message);
 
 static int printerPrint(Printer *const this, const char *message) {
     NetworkPrinter *filePrinter = (NetworkPrinter *) this;
