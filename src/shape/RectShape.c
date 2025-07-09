@@ -1,12 +1,12 @@
 #include "RectShape.h"
 
-#include "sds/sds.h"
-
 #include <stdlib.h>
 
-void drawRect(RectShape *this, Printer *printer);
+static void drawShapeAndStore(RectShape *this);
 
-void drawShape(Shape *const this, Printer *const printer) {
+static void drawRect(RectShape *this, Printer *printer);
+
+static void drawShape(Shape *const this, Printer *const printer) {
     RectShape *rect = (RectShape *) this;
     drawRect(rect, printer);
 }
@@ -25,10 +25,11 @@ RectShape *NewRectShape(int width, int height) {
     rectShape->height = height;
     rectShape->shape = getShape;
     initShape(rectShape);
+    drawShapeAndStore(rectShape);
     return rectShape;
 }
 
-void drawRect(RectShape *this, Printer *printer) {
+void drawShapeAndStore(RectShape *this) {
     sds rectString = sdsempty();
 
     sdscat(rectString, "+");
@@ -54,5 +55,9 @@ void drawRect(RectShape *this, Printer *printer) {
     sdscat(rectString, "+");
     sdscat(rectString, "\n");
 
-    printer->print(printer, rectString);
+    this->drawn = rectString;
+}
+
+void drawRect(RectShape *const this, Printer *const printer) {
+    printer->print(printer, this->drawn);
 }
