@@ -43,10 +43,10 @@ static void drawLine() {
     Shape *shape = line->shape(line);
     shape->draw(shape, printer);
     TEST_ASSERT_EQUAL_STRING("----------", printedString);
-    // shape->free(shape);
+    shape->free(shape);
 
-    // shape = nullptr;
-    // line = nullptr;
+    shape = nullptr;
+    line = nullptr;
 
     free(printer);
 }

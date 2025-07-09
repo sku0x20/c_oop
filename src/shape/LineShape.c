@@ -16,8 +16,14 @@ static void drawShape(Shape *const this, Printer *const printer) {
     printer->print(printer, lineString);
 }
 
+static void freeShape(Shape *this) {
+    LineShape *line = (LineShape *) this;
+    freeThis(line);
+}
+
 static void initShape(LineShape *const this) {
     this->_shape.draw = drawShape;
+    this->_shape.free = freeShape;
 }
 
 static Shape *getShape(LineShape *const this) {
