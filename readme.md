@@ -2,10 +2,10 @@
 
 this sample demonstrates
 
-- programming in object oriented fashion
+- programming in object-oriented fashion
 - doing london style tdd
 
-its an an opinionated approach to do
+its opinionated approach to do
 
 - polymorphism
 - oop
@@ -17,13 +17,13 @@ its an an opinionated approach to do
 
 - interface based
 - should follow LSP
-- ie. don't do type switching
-- type enum(mimicking sealed classes) or int can be added on case basis but should be avoided; consumers should code against interface.
+- i.e., don't do type switching
+- type enum(mimicking sealed classes) or int can be added per-case basis but should be avoided; consumers should code
+  against interface.
 
 > oop
 
 - non imperative style
-- build on idea of message passing style
 - organizing code into objects
 - calling functions/methods on objects
 - control flow follows creating objects and calling their methods to do the job.
@@ -37,18 +37,18 @@ its an an opinionated approach to do
 
 ## conventions
 
-- header are not interfaces
+- headers are not interfaces
 - struct defines types
 - struct defines interfaces
 - types have data as well as methods
-- methods are function pointers which take struct pointer of type itself as first argument usually named 'this'
-- if a function operates on struct it has to be defined as method
+- methods are function pointers that take a struct pointer of the type itself as the first argument usually named 'this'
+- if a function operates on struct, it has to be defined as a method
 - all the data is assumed to me hidden/private
 - clients should use getter methods
 - struct defines interface
-- interface have only methods
+- interfaces have only methods
 - interfaces cannot be initiated
-- a types is said to implement an interface when it embed interface as first member
+- types are said to implement an interface when they embed an interface as the first member
 - each type has a constructor which takes care of mapping methods and initializing the object instance
 
 ## resources
