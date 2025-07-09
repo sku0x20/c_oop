@@ -12,7 +12,3 @@ typedef struct FilePrinter {
 
 FilePrinter *NewFilePrinter(FILE *file);
 
-void NewFilePrinterInto(
-    FilePrinter *filePrinter,
-    FILE *file
-);
