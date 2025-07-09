@@ -22,7 +22,7 @@ foreach t : tests
         t, sources, unity, sds,
         include_directories : ['src', 'libs']
     )
-    test(name, exe)
+    test(name, exe, suite : 'ut')
 endforeach
 
 it_files = run_command(['python3', 'grab_files.py', 'integrationTest'], check : true)
@@ -34,7 +34,7 @@ foreach t : it
         t, sources, unity, sds,
         include_directories : ['src', 'libs']
     )
-    test(name, exe)
+    test(name, exe, suite : 'it')
 endforeach
 
 
@@ -48,6 +48,7 @@ e2e = executable(
 test(
     'e2e',
     e2e,
+    suite : 'e2e',
     depends: [coop],
     args: [coop.full_path()]
 )
