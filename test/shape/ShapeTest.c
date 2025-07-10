@@ -19,29 +19,33 @@ int main(void) {
     return UNITY_END();
 }
 
-// static Printer *createFakePrinter(void) {
-//     Printer *printer = malloc(sizeof(Printer));
-//     return printer;
-// }
-
-static bool called = false;
 static uintptr_t calledWith = 0;
 
 void freeImpl(void *this) {
-    called = true;
     calledWith = (uintptr_t) this;
 }
 
+static uintptr_t printer = 0;
+
+void drawImpl(void *this, Printer *p) {
+    calledWith = (uintptr_t) this;
+    printer = (uintptr_t) p;
+}
+
 static ShapeVtable shapeVtable = {
-    .free = freeImpl
+    .free = freeImpl,
+    .draw = drawImpl,
 };
 
 void callsImpl() {
-    // Printer *printer = createFakePrinter();
     uintptr_t ptr = 0x1234567890;
     Shape shape = NewShape((void *) ptr, &shapeVtable);
     shape.free(&shape);
-    TEST_ASSERT_TRUE(called);
     TEST_ASSERT_EQUAL(ptr, calledWith);
-    // free(printer);
+
+    calledWith = 0;
+    uintptr_t p = 0x9876543210;
+    shape.draw(&shape, (Printer *) p);
+    TEST_ASSERT_EQUAL(ptr, calledWith);
+    TEST_ASSERT_EQUAL(p, printer);
 }

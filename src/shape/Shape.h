@@ -3,6 +3,8 @@
 
 typedef struct ShapeVtable {
     void (*free)(void *this);
+
+    void (*draw)(void *this, Printer *printer);
 } ShapeVtable;
 
 typedef struct Shape {
@@ -17,3 +19,5 @@ typedef struct Shape {
 Shape NewShape(void *ptr, ShapeVtable *vtable);
 
 void freeShapeInternal(Shape *this);
+
+void drawShapeInternal(Shape *this, Printer *printer);
