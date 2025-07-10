@@ -1,5 +1,6 @@
 #include "LineShape.h"
 
+#include <stdio.h>
 #include <stdlib.h>
 
 
@@ -9,11 +10,7 @@ static void freeThis(LineShape *this);
 
 static void drawShape(Shape *const this, Printer *const printer) {
     LineShape *line = (LineShape *) this;
-    sds lineString = sdsempty();
-    for (int i = 0; i < line->len; ++i) {
-        sdscat(lineString, line->pattern);
-    }
-    printer->print(printer, lineString);
+    drawLine(line, printer);
 }
 
 static void freeShape(Shape *this) {
@@ -42,7 +39,12 @@ LineShape *NewLineShape(sds pattern, int len) {
 }
 
 static void drawLine(LineShape *const this, Printer *const printer) {
-    printer->print(printer, "line");
+    sds lineString = sdsempty();
+    for (int i = 0; i < this->len; ++i) {
+        lineString = sdscat(lineString, this->pattern);
+    }
+    printer->print(printer, lineString);
+    sdsfree(lineString);
 }
 
 static void freeThis(LineShape *const this) {
