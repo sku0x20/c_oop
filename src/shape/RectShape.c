@@ -2,6 +2,8 @@
 
 #include <stdlib.h>
 
+#include "LineShape.h"
+
 static void drawShapeAndStore(RectShape *this);
 
 static void drawRect(RectShape *this, Printer *printer);
@@ -29,35 +31,40 @@ RectShape *NewRectShape(int width, int height) {
     return rectShape;
 }
 
+void drawRect(RectShape *const this, Printer *const printer) {
+    printer->print(printer, this->drawn);
+}
+
 void drawShapeAndStore(RectShape *this) {
     sds rectString = sdsempty();
 
-    sdscat(rectString, "+");
-    for (int j = 1; j < this->width - 1; ++j) {
-        sdscat(rectString, "-");
-    }
-    sdscat(rectString, "+");
-    sdscat(rectString, "\n");
+    LineShape *plus = NewLineShape(sdsnew("+"), 1);
+    LineShape *minus = NewLineShape(sdsnew("-"), this->width - 2);
+    LineShape *pipe = NewLineShape(sdsnew("|"), 1);
+    LineShape *space = NewLineShape(sdsnew(" "), this->width - 2);
+    LineShape *newLine = NewLineShape(sdsnew("\n"), 1);
 
-    for (int i = 1; i < this->height - 1; ++i) {
-        sdscat(rectString, "|");
-        for (int j = 1; j < this->width - 1; ++j) {
-            sdscat(rectString, " ");
-        }
-        sdscat(rectString, "|");
-        sdscat(rectString, "\n");
+    rectString = sdscat(rectString, plus->getSds(plus));
+    rectString = sdscat(rectString, minus->getSds(minus));
+    rectString = sdscat(rectString, plus->getSds(plus));
+    rectString = sdscat(rectString, newLine->getSds(newLine));
+
+    for (int i = 0; i < this->height - 2; ++i) {
+        rectString = sdscat(rectString, pipe->getSds(pipe));
+        rectString = sdscat(rectString, space->getSds(space));
+        rectString = sdscat(rectString, pipe->getSds(pipe));
+        rectString = sdscat(rectString, newLine->getSds(newLine));
     }
 
-    sdscat(rectString, "+");
-    for (int j = 1; j < this->width - 1; ++j) {
-        sdscat(rectString, "-");
-    }
-    sdscat(rectString, "+");
-    sdscat(rectString, "\n");
+    rectString = sdscat(rectString, plus->getSds(plus));
+    rectString = sdscat(rectString, minus->getSds(minus));
+    rectString = sdscat(rectString, plus->getSds(plus));
+    rectString = sdscat(rectString, newLine->getSds(newLine));
 
     this->drawn = rectString;
-}
 
-void drawRect(RectShape *const this, Printer *const printer) {
-    printer->print(printer, this->drawn);
+    plus->free(plus);
+    minus->free(minus);
+    pipe->free(pipe);
+    space->free(space);
 }
