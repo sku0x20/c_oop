@@ -56,5 +56,6 @@ static sds getSds(LineShape *const this) {
 }
 
 static void freeThis(LineShape *const this) {
+    sdsfree(this->pattern);
     free(this);
 }
