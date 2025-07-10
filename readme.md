@@ -72,7 +72,7 @@ struct impl{
 - vtable is a pointer for memory optimization reasons
   - all implementation instances can share the same vtable struct instance
   - though one additional lookup
-- implementations return the interface struct by value, never a pointer
+- interface struct is always returned by value, never pointer
 - interface have methods which delegate to methods in vtable passing the impl pointer
 - interfaces are header only, ie. they have .h file only no .c
 
