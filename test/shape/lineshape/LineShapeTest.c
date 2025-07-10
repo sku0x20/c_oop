@@ -43,12 +43,11 @@ static void drawLine() {
     sds pattern = sdsnew("-");
     LineShape *line = NewLineShape(pattern, 10);
 
-    Shape *shape = line->shape(line);
-    shape->draw(shape, printer);
+    Shape shape = line->shape(line);
+    shape.draw(&shape, printer);
     TEST_ASSERT_EQUAL_STRING("----------", printedString);
-    shape->free(shape);
+    shape.free(&shape);
 
-    shape = nullptr;
     line = nullptr;
 
     free(printer);
