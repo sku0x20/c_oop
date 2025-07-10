@@ -16,7 +16,7 @@ typedef struct LineShape {
 
     void (*draw)(struct LineShape *this, Printer *printer);
 
-    // sds (*getSds)(struct LineShape *this);
+    sds (*getSds)(struct LineShape *this);
 } LineShape;
 
 /**

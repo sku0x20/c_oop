@@ -4,6 +4,8 @@
 #include <stdlib.h>
 
 
+static sds getSds(LineShape *const this);
+
 static void drawLine(LineShape *this, Printer *printer);
 
 static void freeThis(LineShape *this);
@@ -33,18 +35,24 @@ LineShape *NewLineShape(sds pattern, int len) {
     line->len = len;
     line->draw = drawLine;
     line->free = freeThis;
+    line->getSds = getSds;
     line->shape = getShape;
     initShape(line);
     return line;
 }
 
 static void drawLine(LineShape *const this, Printer *const printer) {
+    sds lineString = getSds(this);
+    printer->print(printer, lineString);
+    sdsfree(lineString);
+}
+
+static sds getSds(LineShape *const this) {
     sds lineString = sdsempty();
     for (int i = 0; i < this->len; ++i) {
         lineString = sdscat(lineString, this->pattern);
     }
-    printer->print(printer, lineString);
-    sdsfree(lineString);
+    return lineString;
 }
 
 static void freeThis(LineShape *const this) {
