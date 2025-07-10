@@ -19,5 +19,5 @@ void Init(int argc, char *argv[]) {
 
     ManipulatableString *string = NewManipulatableString(input);
     string->reverse(string);
-    string->printTo(string, &printer);
+    string->printTo(string, printer);
 }

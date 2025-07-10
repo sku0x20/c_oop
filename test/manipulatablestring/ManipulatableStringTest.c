@@ -33,24 +33,28 @@ static void reverse(void) {
 
 static sds printedString = nullptr;
 
-static int fakePrint(Printer *const printer, const char *message) {
+int printImpl(void *this, const char *message) {
+    TEST_ASSERT_EQUAL(this, (void *) 0x1234567890);
     sdsfree(printedString);
     printedString = sdsnew(message);
     return 0;
 }
 
-static Printer *createFakePrinter(void) {
-    Printer *printer = malloc(sizeof(Printer));
-    printer->print = fakePrint;
-    return printer;
+static PrinterVtable printerVTable = {
+    .print = printImpl,
+};
+
+static Printer createFakePrinter(void) {
+    void *ptr = (void *) 0x1234567890;
+    return NewPrinter(ptr, &printerVTable);
 }
+
 
 static void printTo() {
     ManipulatableString *string = NewManipulatableString("hello world via printer");
-    Printer *printer = createFakePrinter();
+    Printer printer = createFakePrinter();
     string->printTo(string, printer);
     TEST_ASSERT_EQUAL_STRING("hello world via printer", printedString);
-    free(printer);
     string->free(string);
     string = nullptr;
 }
