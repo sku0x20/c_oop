@@ -18,6 +18,3 @@ typedef struct Shape {
 
 Shape NewShape(void *ptr, ShapeVtable *vtable);
 
-void freeShapeInternal(Shape *this);
-
-void drawShapeInternal(Shape *this, Printer *printer);
