@@ -24,10 +24,10 @@ int main(void) {
 //     return printer;
 // }
 
-static bool called = false;
+static bool calledFree = false;
 
 void freeImpl(void *this) {
-    called = true;
+    calledFree = true;
 }
 
 static ShapeVtable shapeVtable = {
@@ -39,6 +39,6 @@ void callsImpl() {
     uintptr_t ptr = 0x1234567890;
     Shape shape = NewShape((void *) ptr, &shapeVtable);
     shape.free(&shape);
-    TEST_ASSERT_TRUE(called);
+    TEST_ASSERT_TRUE(calledFree);
     // free(printer);
 }
