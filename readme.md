@@ -74,6 +74,7 @@ struct impl{
   - though one additional lookup
 - implementations return the interface struct by value, never a pointer
 - interface have methods which delegate to methods in vtable passing the impl pointer
+- interfaces are header only, ie. they have .h file only no .c
 
 ## limitations
 
