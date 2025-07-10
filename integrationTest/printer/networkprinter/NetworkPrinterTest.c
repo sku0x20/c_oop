@@ -52,8 +52,8 @@ static void viaPrinterInterface(void) {
 
     NetworkPrinter *networkPrinter = NewNetworkPrinter();
 
-    Printer *printer = networkPrinter->printer(networkPrinter);
-    int result = printer->print(printer, "printing to stdout: something \n");
+    Printer printer = networkPrinter->printer(networkPrinter);
+    int result = printer.print(&printer, "printing to stdout: something \n");
     TEST_ASSERT_EQUAL(0, result);
 
     sds data = readAllData(stdout);
@@ -68,9 +68,9 @@ static void viaPrinterInterface(void) {
 static void printsDebug(void) {
     NetworkPrinter *networkPrinter = NewNetworkPrinter();
 
-    Debug *debug = networkPrinter->debug(networkPrinter);
+    Debug debug = networkPrinter->debug(networkPrinter);
     // should print debug statements to stdout
-    debug->print(debug);
+    debug.print(&debug);
 
     networkPrinter->free(networkPrinter);
     networkPrinter = nullptr;

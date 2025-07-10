@@ -3,13 +3,11 @@
 #include "../Shape.h"
 
 typedef struct CustomShape {
-    Shape _shape;
+    Shape shape1;
+    Shape shape2;
+    Shape shape3;
 
-    Shape *shape1;
-    Shape *shape2;
-    Shape *shape3;
-
-    Shape *(*shape)(struct CustomShape *this);
+    Shape (*shape)(struct CustomShape *this);
 
     void (*free)(struct CustomShape *this);
 
@@ -20,4 +18,4 @@ typedef struct CustomShape {
  * shapes are owned by CustomShape
  * move semantics
  */
-CustomShape *NewCustomShape(Shape *shape1, Shape *shape2, Shape *shape3);
+CustomShape *NewCustomShape(Shape shape1, Shape shape2, Shape shape3);

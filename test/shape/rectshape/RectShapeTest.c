@@ -39,16 +39,15 @@ static void drawRect() {
 
     RectShape *rect = NewRectShape(5, 3);
 
-    Shape *shape = rect->shape(rect);
-    shape->draw(shape, printer);
+    Shape shape = rect->shape(rect);
+    shape.draw(&shape, printer);
     // +---+
     // |   |
     // +---+
     TEST_ASSERT_EQUAL_STRING("+---+\n|   |\n+---+\n", printedString);
-    // shape->free(shape);
+    shape.free(&shape);
 
-    // shape = nullptr;
-    // rect = nullptr;
+    rect = nullptr;
 
     free(printer);
 }

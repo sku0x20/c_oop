@@ -3,38 +3,29 @@
 #include "FilePrinter.h"
 
 
-static int print(FilePrinter *this, const char *message);
-
-static int printerPrint(Printer *const this, const char *message) {
-    FilePrinter *filePrinter = (FilePrinter *) this;
-    return filePrinter->print(filePrinter, message);
-}
-
-static Printer *getPrinter(FilePrinter *const this) {
-    return (Printer *) this;
-}
-
-static void initPrinterInterface(FilePrinter *const this) {
-    this->_printer.print = printerPrint;
-    this->printer = getPrinter;
-}
-
 static void freeThis(FilePrinter *this);
 
-static void debugPrint(Debug *const this) {
-    fprintf(stderr, "debug = %p\n", this);
-    char *head = (char *) this;
-    head -= sizeof(Printer);
-    FilePrinter *filePrinter = (FilePrinter *) head;
-    fprintf(stderr, "FilePrinter = %p\n", filePrinter);
-    fprintf(stderr, "file = %p\n", filePrinter->file);
+static int print(FilePrinter *this, const char *message);
+
+static PrinterVtable printerVtable = {
+    .print = (void *) print,
+};
+
+static Printer getPrinter(FilePrinter *const this) {
+    return NewPrinter(this, &printerVtable);
 }
 
-static Debug *getDebug(FilePrinter *const this) {
-    this->_debug.print = debugPrint;
-    char *head = (char *) this;
-    head += sizeof(Printer);
-    return (Debug *) head;
+static void debugPrint(FilePrinter *const this) {
+    fprintf(stderr, "Debug FilePrinter = %p\n", this);
+    fprintf(stderr, "debug file = %p\n", this->file);
+}
+
+static DebugVtable debugVtable = {
+    .print = (void *) debugPrint,
+};
+
+static Debug getDebug(FilePrinter *const this) {
+    return NewDebug(this, &debugVtable);
 }
 
 FilePrinter *NewFilePrinter(FILE *file) {
@@ -42,8 +33,8 @@ FilePrinter *NewFilePrinter(FILE *file) {
     filePrinter->file = file;
     filePrinter->print = print;
     filePrinter->free = freeThis;
-    initPrinterInterface(filePrinter);
     filePrinter->debug = getDebug;
+    filePrinter->printer = getPrinter;
     return filePrinter;
 }
 

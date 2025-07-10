@@ -52,8 +52,8 @@ static void viaPrinterInterface(void) {
 
     FilePrinter *filePrinter = NewFilePrinter(tmpFile);
 
-    Printer *printer = filePrinter->printer(filePrinter);
-    int result = printer->print(printer, "printing to file: something \n");
+    Printer printer = filePrinter->printer(filePrinter);
+    int result = printer.print(&printer, "printing to file: something \n");
     TEST_ASSERT_EQUAL(0, result);
 
     sds data = readAllData(tmpFile);
@@ -67,9 +67,9 @@ static void viaPrinterInterface(void) {
 static void printsDebug(void) {
     FilePrinter *filePrinter = NewFilePrinter(stdout);
 
-    Debug *debug = filePrinter->debug(filePrinter);
+    Debug debug = filePrinter->debug(filePrinter);
     // should print debug statements to stderr
-    debug->print(debug);
+    debug.print(&debug);
 
     filePrinter->free(filePrinter);
     filePrinter = nullptr;

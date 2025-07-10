@@ -6,7 +6,7 @@ static char *cString(ManipulatableString *this);
 
 static void reverse(ManipulatableString *this);
 
-static void printTo(ManipulatableString *this, Printer *printer);
+static void printTo(ManipulatableString *this, Printer printer);
 
 static void freeThis(ManipulatableString *this);
 
@@ -25,8 +25,8 @@ static void freeThis(ManipulatableString *const this) {
     free(this);
 }
 
-static void printTo(ManipulatableString *const this, Printer *const printer) {
-    printer->print(printer, this->string);
+static void printTo(ManipulatableString *const this, Printer printer) {
+    printer.print(&printer, this->string);
 }
 
 static char *cString(ManipulatableString *const this) {

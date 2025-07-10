@@ -14,7 +14,8 @@ void Init(int argc, char *argv[]) {
     }
     char *input = argv[0];
 
-    Printer *printer = (Printer *) NewNetworkPrinter();
+    NetworkPrinter *np = NewNetworkPrinter();
+    Printer printer = np->printer(np);
 
     ManipulatableString *string = NewManipulatableString(input);
     string->reverse(string);

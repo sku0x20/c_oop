@@ -5,12 +5,10 @@
 
 
 typedef struct LineShape {
-    Shape _shape;
-
     sds pattern;
     int len;
 
-    Shape *(*shape)(struct LineShape *this);
+    Shape (*shape)(struct LineShape *this);
 
     void (*free)(struct LineShape *this);
 
