@@ -3,9 +3,7 @@
 #include "debug/Debug.h"
 
 typedef struct NetworkPrinter {
-    Printer _printer;
-
-    Printer *(*printer)(struct NetworkPrinter *this);
+    Printer (*printer)(struct NetworkPrinter *this);
 
     Debug (*debug)(struct NetworkPrinter *this);
 
