@@ -1,0 +1,46 @@
+name: ci
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: sudo apt-get install meson -y
+
+      - name: Configure
+        run: meson setup buildDir -Dc_std=c2x
+
+      - name: Build
+        run: meson compile -C buildDir
+
+      - name: Run unit tests
+        run: meson test -C buildDir --suite ut -v
+
+      - name: Run integration tests
+        run: meson test -C buildDir --suite it -v
+
+      - name: Run end-to-end tests
+        run: meson test -C buildDir --suite e2e -v
+
+      - name: Upload test log on failure
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: testlog
+          path: buildDir/meson-logs/testlog.txt
+
+      - name: Upload build log on failure
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: buildlog
+          path: buildDir/meson-logs/meson-log.txt
