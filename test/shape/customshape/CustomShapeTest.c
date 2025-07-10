@@ -5,7 +5,7 @@
 
 #include "shape/customshape/CustomShape.h"
 #include "printer/Printer.h"
-#include "shape/LineShape.h"
+#include "shape/lineshape/LineShape.h"
 
 void setUp(void) {
 }

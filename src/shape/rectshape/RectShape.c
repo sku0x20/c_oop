@@ -2,7 +2,7 @@
 
 #include <stdlib.h>
 
-#include "../LineShape.h"
+#include "../lineshape/LineShape.h"
 
 static void drawShapeAndStore(RectShape *this);
 

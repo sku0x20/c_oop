@@ -3,7 +3,7 @@
 #include "unity/unity.h"
 #include "sds/sds.h"
 
-#include "shape/LineShape.h"
+#include "shape/lineshape/LineShape.h"
 #include "printer/Printer.h"
 
 void setUp(void) {
