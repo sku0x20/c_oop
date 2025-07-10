@@ -4,7 +4,7 @@
 #include <stdlib.h>
 
 
-static sds getSds(LineShape *const this);
+static sds getSds(LineShape *this);
 
 static void drawLine(LineShape *this, Printer *printer);
 
