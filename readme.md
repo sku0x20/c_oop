@@ -37,34 +37,51 @@ its opinionated approach to do
 
 ## conventions
 
-- headers are not interfaces
+> types
+
 - struct defines types
-- struct defines interfaces
 - types have data as well as methods
 - methods are function pointers that take a struct pointer of the type itself as the first argument usually named 'this'
 - if a function operates on struct, it has to be defined as a method
 - all the data is assumed to me hidden/private
 - clients should use getter methods
-- struct defines interface
-- interfaces have only methods
-- interfaces cannot be initiated
-- types have minimum one constructor that initializes and returns the object
+- types have minimum one constructor that initializes and returns the object on heap
 - objects should be initialized by the constructor
-- initialization should take care of method mapping
 - each type has a free method
   - it frees the resources as well as itself
 - methods' implementations should make 'this' as a const pointer
   - better to take every pointer parameter as a const pointer
-- types are said to implement an interface
-  - if they have a method that can cast to that interface
-  - type has an embedded interface struct
-  - the casting method returns a pointer to that embedded struct
 
-## resources
+> interfaces
 
-- https://youtu.be/bZO0A1tj2MI
+- headers are not interfaces
+- struct defines interfaces
+- typical vtable implementation
+
+```c
+struct interface {
+  void* impl; // opaque pointer to impl. struct instance
+  vtable* vtable; // vtable pointer to impl.
+}
+
+struct impl{
+  interface interface(impl* this)
+}
+```
+
+- vtable is a pointer for memory optimization reasons
+  - all implementation instances can share the same vtable struct instance
+  - though one additional lookup
+- implementations return the interface struct by value, never a pointer
+- interface have methods which delegate to methods in vtable passing the impl pointer
 
 ## limitations
 
 - cannot initiate objects on the stack
   - else free won't work
+- since interface is on stack, its calling convention is different from types
+  - ie. '.' vs '->'
+
+## resources
+
+- zig allocator interface & implementations
