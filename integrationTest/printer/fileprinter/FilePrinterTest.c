@@ -67,9 +67,9 @@ static void viaPrinterInterface(void) {
 static void printsDebug(void) {
     FilePrinter *filePrinter = NewFilePrinter(stdout);
 
-    Debug *debug = filePrinter->debug(filePrinter);
+    Debug debug = filePrinter->debug(filePrinter);
     // should print debug statements to stderr
-    debug->print(debug);
+    debug.print(&debug);
 
     filePrinter->free(filePrinter);
     filePrinter = nullptr;

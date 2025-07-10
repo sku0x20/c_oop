@@ -21,20 +21,17 @@ static void initPrinterInterface(FilePrinter *const this) {
 
 static void freeThis(FilePrinter *this);
 
-static void debugPrint(Debug *const this) {
-    fprintf(stderr, "debug = %p\n", this);
-    char *head = (char *) this;
-    head -= sizeof(Printer);
-    FilePrinter *filePrinter = (FilePrinter *) head;
-    fprintf(stderr, "FilePrinter = %p\n", filePrinter);
-    fprintf(stderr, "file = %p\n", filePrinter->file);
+static void debugPrint(FilePrinter *const this) {
+    fprintf(stderr, "Debug FilePrinter = %p\n", this);
+    fprintf(stderr, "debug file = %p\n", this->file);
 }
 
-static Debug *getDebug(FilePrinter *const this) {
-    this->_debug.print = debugPrint;
-    char *head = (char *) this;
-    head += sizeof(Printer);
-    return (Debug *) head;
+static DebugVtable debugVtable = {
+    .print = (void *) debugPrint,
+};
+
+static Debug getDebug(FilePrinter *const this) {
+    return NewDebug(this, &debugVtable);
 }
 
 FilePrinter *NewFilePrinter(FILE *file) {
