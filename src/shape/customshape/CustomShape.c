@@ -2,22 +2,17 @@
 
 #include <stdlib.h>
 
-static void drawShape(Shape *const this, Printer *const printer);
+static void drawShape(CustomShape *const this, Printer *const printer);
 
 static void freeThis(CustomShape *this);
 
-static void freeShape(Shape *this) {
-    CustomShape *customShape = (CustomShape *) this;
-    freeThis(customShape);
-}
+static ShapeVtable _shapeVtable = {
+    .free = (void *) freeThis,
+    .draw = (void *) drawShape
+};
 
-static void initShape(CustomShape *const this) {
-    this->_shape.draw = drawShape;
-    this->_shape.free = freeShape;
-}
-
-static Shape *getShape(CustomShape *const this) {
-    return (Shape *) this;
+static Shape getShape(CustomShape *const this) {
+    return NewShape(this, &_shapeVtable);
 }
 
 CustomShape *NewCustomShape(Shape *shape1, Shape *shape2, Shape *shape3) {
@@ -26,15 +21,13 @@ CustomShape *NewCustomShape(Shape *shape1, Shape *shape2, Shape *shape3) {
     customShape->shape2 = shape2;
     customShape->shape3 = shape3;
     customShape->shape = getShape;
-    initShape(customShape);
     return customShape;
 }
 
-static void drawShape(Shape *const this, Printer *const printer) {
-    CustomShape *customShape = (CustomShape *) this;
-    customShape->shape1->draw(customShape->shape1, printer);
-    customShape->shape2->draw(customShape->shape2, printer);
-    customShape->shape3->draw(customShape->shape3, printer);
+static void drawShape(CustomShape *const this, Printer *const printer) {
+    this->shape1->draw(this->shape1, printer);
+    this->shape2->draw(this->shape2, printer);
+    this->shape3->draw(this->shape3, printer);
 }
 
 static void freeThis(CustomShape *const this) {

@@ -50,12 +50,11 @@ static void drawCustomShape() {
         line3->shape(line3)
     );
 
-    Shape *shape = customShape->shape(customShape);
-    shape->draw(shape, printer);
+    Shape shape = customShape->shape(customShape);
+    shape.draw(&shape, printer);
     TEST_ASSERT_EQUAL_STRING("-+++|||||", printedString);
-    shape->free(shape);
+    shape.free(&shape);
 
-    shape = nullptr;
     line1 = nullptr;
     line2 = nullptr;
     line3 = nullptr;
