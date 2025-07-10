@@ -1,5 +1,5 @@
 #pragma once
-#include "Printer.h"
+#include "../Printer.h"
 #include "debug/Debug.h"
 
 typedef struct NetworkPrinter {
