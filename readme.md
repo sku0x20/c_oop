@@ -67,3 +67,4 @@ its opinionated approach to do
 ## limitations
 
 - cannot initiate objects on the stack
+  - else free won't work

@@ -3,7 +3,7 @@
 #include "unity/unity.h"
 #include "sds/sds.h"
 
-#include "ManipulatableString.h"
+#include "manipulatablestring/ManipulatableString.h"
 #include "printer/Printer.h"
 
 void setUp(void) {

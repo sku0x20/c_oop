@@ -3,9 +3,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "ManipulatableString.h"
+#include "manipulatablestring/ManipulatableString.h"
 #include "printer/Printer.h"
-#include "printer/NetworkPrinter.h"
+#include "printer/networkprinter/NetworkPrinter.h"
 
 void Init(int argc, char *argv[]) {
     if (argc < 1) {

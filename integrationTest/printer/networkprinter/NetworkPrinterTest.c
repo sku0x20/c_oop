@@ -4,7 +4,7 @@
 #include "unity/unity.h"
 #include "sds/sds.h"
 
-#include "printer/NetworkPrinter.h"
+#include "printer/networkprinter/NetworkPrinter.h"
 #include "printer/Printer.h"
 #include "debug/Debug.h"
 

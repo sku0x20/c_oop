@@ -1,7 +1,7 @@
 #pragma once
 #include "sds/sds.h"
 
-#include "printer/Printer.h"
+#include "../printer/Printer.h"
 
 typedef struct ManipulatableString {
     sds string;
