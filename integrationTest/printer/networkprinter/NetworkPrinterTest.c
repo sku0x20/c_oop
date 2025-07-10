@@ -68,9 +68,9 @@ static void viaPrinterInterface(void) {
 static void printsDebug(void) {
     NetworkPrinter *networkPrinter = NewNetworkPrinter();
 
-    Debug *debug = networkPrinter->debug(networkPrinter);
+    Debug debug = networkPrinter->debug(networkPrinter);
     // should print debug statements to stdout
-    debug->print(debug);
+    debug.print(&debug);
 
     networkPrinter->free(networkPrinter);
     networkPrinter = nullptr;

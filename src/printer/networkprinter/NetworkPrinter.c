@@ -21,18 +21,16 @@ static void initPrinterInterface(NetworkPrinter *const this) {
 
 static void freeThis(NetworkPrinter *this);
 
-static void debugPrint(Debug *const this) {
-    fprintf(stderr, "debug = %p\n", this);
-    char *head = (char *) this;
-    head -= sizeof(Printer);
-    NetworkPrinter *networkPrinter = (NetworkPrinter *) head;
-    fprintf(stderr, "NetworkPrinter = %p\n", networkPrinter);
+static void debugPrint(NetworkPrinter *const this) {
+    fprintf(stderr, "Debug NetworkPrinter = %p\n", this);
 }
 
-static Debug *getDebug(NetworkPrinter *const this) {
-    char *head = (char *) this;
-    head += sizeof(Printer);
-    return (Debug *) head;
+static DebugVtable debugVtable = {
+    .print = (void *) debugPrint,
+};
+
+static Debug getDebug(NetworkPrinter *const this) {
+    return NewDebug(this, &debugVtable);
 }
 
 NetworkPrinter *NewNetworkPrinter() {
@@ -40,7 +38,6 @@ NetworkPrinter *NewNetworkPrinter() {
     networkPrinter->print = print;
     networkPrinter->free = freeThis;
     initPrinterInterface(networkPrinter);
-    networkPrinter->_debug.print = debugPrint;
     networkPrinter->debug = getDebug;
     return networkPrinter;
 }
