@@ -4,21 +4,20 @@
 
 #include "../lineshape/LineShape.h"
 
+
 static void drawShapeAndStore(RectShape *this);
 
 static void drawRect(RectShape *this, Printer *printer);
 
-static void drawShape(Shape *const this, Printer *const printer) {
-    RectShape *rect = (RectShape *) this;
-    drawRect(rect, printer);
-}
+static void freeRect(RectShape *this);
 
-static void initShape(RectShape *const this) {
-    this->_shape.draw = drawShape;
-}
+static ShapeVtable _shapeVtable = {
+    .free = (void *) freeRect,
+    .draw = (void *) drawRect
+};
 
-static Shape *getShape(RectShape *const this) {
-    return (Shape *) this;
+static Shape getShape(RectShape *const this) {
+    return NewShape(this, &_shapeVtable);
 }
 
 RectShape *NewRectShape(int width, int height) {
@@ -26,13 +25,17 @@ RectShape *NewRectShape(int width, int height) {
     rectShape->width = width;
     rectShape->height = height;
     rectShape->shape = getShape;
-    initShape(rectShape);
     drawShapeAndStore(rectShape);
     return rectShape;
 }
 
 void drawRect(RectShape *const this, Printer *const printer) {
     printer->print(printer, this->drawn);
+}
+
+void freeRect(RectShape *const this) {
+    sdsfree(this->drawn);
+    free(this);
 }
 
 void drawShapeAndStore(RectShape *this) {
