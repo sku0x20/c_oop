@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Shape.h"
+#include "../Shape.h"
 
 typedef struct CustomShape {
     Shape _shape;
