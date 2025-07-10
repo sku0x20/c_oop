@@ -52,8 +52,8 @@ static void viaPrinterInterface(void) {
 
     FilePrinter *filePrinter = NewFilePrinter(tmpFile);
 
-    Printer *printer = filePrinter->printer(filePrinter);
-    int result = printer->print(printer, "printing to file: something \n");
+    Printer printer = filePrinter->printer(filePrinter);
+    int result = printer.print(&printer, "printing to file: something \n");
     TEST_ASSERT_EQUAL(0, result);
 
     sds data = readAllData(tmpFile);

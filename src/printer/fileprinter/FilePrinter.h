@@ -4,11 +4,9 @@
 #include "debug/Debug.h"
 
 typedef struct FilePrinter {
-    Printer _printer;
-
     FILE *file;
 
-    Printer *(*printer)(struct FilePrinter *this);
+    Printer (*printer)(struct FilePrinter *this);
 
     Debug (*debug)(struct FilePrinter *this);
 

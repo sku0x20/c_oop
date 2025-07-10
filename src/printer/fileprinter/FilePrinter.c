@@ -3,23 +3,17 @@
 #include "FilePrinter.h"
 
 
+static void freeThis(FilePrinter *this);
+
 static int print(FilePrinter *this, const char *message);
 
-static int printerPrint(Printer *const this, const char *message) {
-    FilePrinter *filePrinter = (FilePrinter *) this;
-    return filePrinter->print(filePrinter, message);
-}
+static PrinterVtable printerVtable = {
+    .print = (void *) print,
+};
 
-static Printer *getPrinter(FilePrinter *const this) {
-    return (Printer *) this;
+static Printer getPrinter(FilePrinter *const this) {
+    return NewPrinter(this, &printerVtable);
 }
-
-static void initPrinterInterface(FilePrinter *const this) {
-    this->_printer.print = printerPrint;
-    this->printer = getPrinter;
-}
-
-static void freeThis(FilePrinter *this);
 
 static void debugPrint(FilePrinter *const this) {
     fprintf(stderr, "Debug FilePrinter = %p\n", this);
@@ -39,8 +33,8 @@ FilePrinter *NewFilePrinter(FILE *file) {
     filePrinter->file = file;
     filePrinter->print = print;
     filePrinter->free = freeThis;
-    initPrinterInterface(filePrinter);
     filePrinter->debug = getDebug;
+    filePrinter->printer = getPrinter;
     return filePrinter;
 }
 
