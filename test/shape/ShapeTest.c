@@ -24,10 +24,12 @@ int main(void) {
 //     return printer;
 // }
 
-static bool calledFree = false;
+static bool called = false;
+static uintptr_t calledWith = 0;
 
 void freeImpl(void *this) {
-    calledFree = true;
+    called = true;
+    calledWith = (uintptr_t) this;
 }
 
 static ShapeVtable shapeVtable = {
@@ -39,6 +41,7 @@ void callsImpl() {
     uintptr_t ptr = 0x1234567890;
     Shape shape = NewShape((void *) ptr, &shapeVtable);
     shape.free(&shape);
-    TEST_ASSERT_TRUE(calledFree);
+    TEST_ASSERT_TRUE(called);
+    TEST_ASSERT_EQUAL(ptr, calledWith);
     // free(printer);
 }
