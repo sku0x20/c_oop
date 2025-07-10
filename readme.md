@@ -73,7 +73,6 @@ struct impl{
   - all implementation instances can share the same vtable struct instance
   - though one additional lookup
 - interface struct is always returned by value, never pointer
-- interfaces should be passed by value
 - interface have methods which delegate to methods in vtable passing the impl pointer
 
 ## limitations
