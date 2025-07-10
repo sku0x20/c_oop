@@ -79,8 +79,6 @@ struct impl{
 
 - cannot initiate objects on the stack
   - else free won't work
-- since interface is on stack, its calling convention is different from types
-  - ie. '.' vs '->'
 
 ## resources
 
