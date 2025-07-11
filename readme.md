@@ -74,6 +74,8 @@ struct impl{
   - though one additional lookup
 - interface struct is always returned by value, never pointer
 - interface have methods which delegate to methods in vtable passing the impl pointer
+- when taking interface as a function parameter, try to take it by value
+- when taking interface in constructor, it should be passed by value (move semantics)
 
 ## limitations
 
